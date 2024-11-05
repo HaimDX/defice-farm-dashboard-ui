@@ -9,8 +9,9 @@
     "sequelize:migrate:undo": "sequelize-cli db:migrate:undo",
     "clean:cache": "node ./scripts/cleanup-cache-dir.js",
     "postinstall": "(node ./scripts/is-prod.js || tsc) && npm run sequelize:migrate",
-    "i": "tsc && (appium plugin uninstall appium-dashboard || exit 0) && appium plugin install --source=local $(pwd)",
-    "start-appium": "appium --use-plugins=appium-dashboard --relaxed-security"
+    "i": "tsc && appium plugin install --source=local $(pwd)",
+    "start-appium": "appium --use-plugins=appium-dashboard --relaxed-security",
+    "remove": "appium plugin uninstall appium-dashboard"
   },
   "repository": {
     "type": "git",
@@ -73,6 +74,8 @@
     "@types/node-fetch": "^3.0.3",
     "@types/teen_process": "^1.16.0",
     "@types/uuid": "^8.3.1",
+    "appium-uiautomator2-driver": "^2.44.2",
+    "appium-xcuitest-driver": "^6.0.2",
     "typescript": "^4.4.4"
   },
   "peerDependencies": {

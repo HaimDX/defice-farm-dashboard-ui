@@ -231,6 +231,9 @@ class SessionManager {
       let name = desired["dashboard:name"];
       let build, project;
 
+      /* Customer Tractive Caps */
+      let user = desired["dashboard:tractive:user"];
+
       let { is_profiling_available, device_info } = await this.startAppProfiling();
       await this.startHttpLogsCapture();
 
@@ -252,9 +255,11 @@ class SessionManager {
         is_profiling_available,
         name: name || null,
         live_stream_port: await getMjpegServerPort(command.driver, this.sessionInfo.session_id),
+        user : user,
       } as any);
 
       await this.saveCommandLog(command, null);
+      logger.info(`Created a session  ${this.sessionInfo.session_id} for user ${user} `);
     } catch (err) {
       logger.error(
         `Error saving new session info in database for session ${

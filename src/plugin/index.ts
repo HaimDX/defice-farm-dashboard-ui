@@ -21,6 +21,7 @@ const CUSTOM_CAPABILITIES = [
   "dashboard:videoResolution",
   "dashboard:enableLiveVideo",
   "dashboard:enableVideoRecording",
+  "dashboard:tractive:user",
 ];
 
 class AppiumDashboardPlugin extends BasePlugin {

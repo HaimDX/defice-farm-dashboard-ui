@@ -29,6 +29,8 @@ const StyledButton = styled(Button)`
   }
 `;
 
+const TEMP_USERS = ["ANA", "GHH", "DEF"];
+
 type Propstype = {
   onApply: (payload: any) => void;
 };
@@ -40,6 +42,7 @@ export default function SessionListFilter(props: Propstype) {
   const [os, setOs] = useState(filterState.os);
   const [status, setStatus] = useState(filterState.status);
   const [device_udid, setUuid] = useState(filterState.device_udid);
+  const [user, setUser] = useState(filterState.user);
   const [showClearButton, setShowClearButton] = useState(false);
 
   const apply = useCallback(() => {
@@ -48,8 +51,9 @@ export default function SessionListFilter(props: Propstype) {
       os,
       status: status,
       device_udid,
+      user,
     });
-  }, [name, os, status, device_udid]);
+  }, [name, os, status, device_udid, user]);
 
   const reset = useCallback(() => {
     onApply({
@@ -57,12 +61,14 @@ export default function SessionListFilter(props: Propstype) {
       os: [],
       status: [],
       device_udid: "",
+      user: [],
     });
-  }, [name, os, status, device_udid]);
+  }, [name, os, status, device_udid, user]);
 
   useEffect(() => {
-    setShowClearButton([name, os, status, device_udid].some((val) => !!val));
-  }, [name, os, status, device_udid]);
+    setShowClearButton(
+      [name, os, status, device_udid, user].some((val) => !!val));
+  }, [name, os, status, device_udid, user]);
 
   return (
     <Container>
@@ -128,6 +134,26 @@ export default function SessionListFilter(props: Propstype) {
             </Column>
           </ParallelLayout>
         </Row>
+
+        {/* Tractive Custom column  USER  */}
+        <Row padding="10px 0px">
+          <ParallelLayout>
+            <Column grid={6}>
+              <Label>User:</Label>
+            </Column>
+            <Column grid={6}>
+              <Control>
+                <Select
+                  multiple={false}
+                  options={TEMP_USERS}
+                  onChange={(value) => setUser(value)}
+                  selected={status}
+                />
+              </Control>
+            </Column>
+          </ParallelLayout>
+        </Row>
+
         <Row align="center" padding="20px 0px 0px">
           <ParallelLayout>
             <Column grid={6}>

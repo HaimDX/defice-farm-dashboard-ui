@@ -7,6 +7,7 @@ export type SessionFilterType = {
   os: Array<string>;
   status: Array<string>;
   device_udid: string;
+  user: Array<string>;
 };
 
 export type FilterState = {
@@ -19,6 +20,7 @@ const initialState: FilterState = {
     os: [],
     status: [],
     device_udid: "",
+    user: [],
   },
 };
 
