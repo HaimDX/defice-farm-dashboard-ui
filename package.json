@@ -1,6 +1,6 @@
 {
   "name": "appium-dashboard-tractive",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Appium plugin to view session execution details via detailed dashboard",
   "main": "lib/index.js",
   "scripts": {
