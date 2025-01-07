@@ -1,6 +1,6 @@
 {
-  "name": "appium-dashboard",
-  "version": "v2.0.3",
+  "name": "appium-dashboard-tractive",
+  "version": "1.0.0",
   "description": "Appium plugin to view session execution details via detailed dashboard",
   "main": "lib/index.js",
   "scripts": {
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://sudharsan-selvaraj@github.com/sudharsan-selvaraj/appium-dashboard-plugin.git"
+    "url": "git+https://github.com/HaimDX/defice-farm-dashboard-ui.git"
   },
   "keywords": [],
   "author": "",
@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/sudharsan-selvaraj/appium-dashboard-plugin#readme",
   "appium": {
-    "pluginName": "appium-dashboard",
+    "pluginName": "appium-dashboard-tractive",
     "mainClass": "AppiumDashboardPlugin"
   },
   "dependencies": {
