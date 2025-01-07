@@ -182,6 +182,12 @@ class Session extends Model<Session> {
   })
   session_status_message?: string;
 
+  @AllowNull(true)
+  @Column({
+    type: DataTypes.TEXT,
+  })
+  user?: string | null;
+
   @BelongsTo(() => Build)
   build!: Build;
 
