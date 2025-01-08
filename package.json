@@ -1,6 +1,6 @@
 {
   "name": "appium-dashboard-tractive",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Appium plugin to view session execution details via detailed dashboard",
   "main": "lib/index.js",
   "scripts": {
@@ -11,7 +11,8 @@
     "postinstall": "(node ./scripts/is-prod.js || tsc) && npm run sequelize:migrate",
     "i": "tsc && appium plugin install --source=local $(pwd)",
     "start-appium": "appium --use-plugins=appium-dashboard --relaxed-security",
-    "remove": "appium plugin uninstall appium-dashboard"
+    "remove": "appium plugin uninstall appium-dashboard",
+    "build" : "tsc"
   },
   "repository": {
     "type": "git",

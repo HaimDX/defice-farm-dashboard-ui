@@ -182,11 +182,16 @@ class Session extends Model<Session> {
   })
   session_status_message?: string;
 
+  /********** Custom Tractive Column ********************/
+
   @AllowNull(true)
   @Column({
     type: DataTypes.TEXT,
   })
   user?: string | null;
+
+  /********* END Custom Tractive Column *****************/
+
 
   @BelongsTo(() => Build)
   build!: Build;

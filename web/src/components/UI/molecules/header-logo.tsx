@@ -26,7 +26,7 @@ export default function HeaderLogo() {
         <IconContainer>
           <Icon name="home" size={Sizes.XL} />
         </IconContainer>
-        <Title>APPIUM DASHBOARD</Title>
+        <Title>Tractive Device Farm Dashboard</Title>
       </Header>
     </Container>
   );

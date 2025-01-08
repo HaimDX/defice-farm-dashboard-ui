@@ -14,6 +14,10 @@ export default class SessionApi {
     return Api.get("/sessions", filterParams || {});
   }
 
+  public static getSessionsByBuild(buildId: string,filterParams?: Record<string, string>,){
+    return Api.get(`/builds/${buildId}/sessions`,filterParams || {});
+  }
+
   public static getTextLogsForSession(
     sessionId: string,
   ): Promise<ListResponse> {

@@ -231,12 +231,14 @@ class SessionManager {
       let name = desired["dashboard:name"];
       let build, project;
 
-      /* Customer Tractive Caps */
-      let user = desired["dashboard:tractive:user"];
+      /* Custom Tractive Caps */
+      let user = desired["dashboard:tractive-user"];
 
       let { is_profiling_available, device_info } = await this.startAppProfiling();
       await this.startHttpLogsCapture();
 
+
+      /* Build & Project Tractive Caps */
       if (projectName) {
         project = await getOrCreateNewProject({ projectName });
       }

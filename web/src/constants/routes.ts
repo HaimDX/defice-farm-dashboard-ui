@@ -17,6 +17,10 @@ export const getSessionDetailsUrl = (id: string) => {
   return `${BASE_URL}/session/${id}`;
 };
 
+export const getBuildDetailsUrl = (id: string) => {
+  return `${BASE_URL}/builds/${id}/sessions`;
+};
+
 export const getBaseUrl = () => {
   return `${BASE_URL}`;
 };

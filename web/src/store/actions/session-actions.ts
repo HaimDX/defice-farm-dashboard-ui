@@ -13,6 +13,11 @@ export const fetchSessionsSuccess = (payload: PaginatedResponse<Session>) => ({
   payload,
 });
 
+export const fetchSessionByBuildId = (payload?: any) => ({
+  type: ReduxActionTypes.FETCH_SESSIONS_BY_BUILD_ID,
+  payload,
+});
+
 export const fetchSessionSuccess = (payload: Session) => ({
   type: ReduxActionTypes.FETCH_SESSION_SUCCESS,
   payload,

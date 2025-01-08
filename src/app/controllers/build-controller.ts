@@ -10,7 +10,7 @@ import { Project } from "../../models";
 export class BuildController extends BaseController {
   public initializeRoutes(router: Router, config: any) {
     router.get("/", this.getBuilds.bind(this));
-    router.get("/:builds/sessions", this.getSessionsForBuild.bind(this));
+    router.get("/:build_id/sessions", this.getSessionsForBuild.bind(this));
   }
 
   public async getBuilds(request: Request, response: Response, next: NextFunction) {
@@ -53,7 +53,10 @@ export class BuildController extends BaseController {
         {},
         {
           session: sessionInfo,
-          project_name: build.project.name,
+          build_id: build.build_id,
+          build_name: build.name ? build.name : 'undefined build ',
+          project_name: build.project ? build.project.name : 'undefined project',
+          created_at: build.created_at
         }
       );
     }) as any;
@@ -61,13 +64,17 @@ export class BuildController extends BaseController {
   }
 
   public async getSessionsForBuild(request: Request, response: Response, next: NextFunction) {
-    let buildId = request.params.builId;
+    let buildId = request.params.build_id;
+    const filters = parseSessionFilterParams(request.query as any);
+
     this.sendSuccessResponse(
       response,
       await Session.findAndCountAll({
         where: {
           build_id: buildId,
+          [Op.and]: filters,
         },
+        order: [["start_time", "DESC"]],
       })
     );
   }

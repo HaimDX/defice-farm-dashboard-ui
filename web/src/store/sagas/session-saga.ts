@@ -31,6 +31,22 @@ function* fetchSessions(action?: ReduxActionType<Record<string, string>>) {
   }
 }
 
+function* fetchAllSessionsByBuild(action: ReduxActionType<string>) {
+  if (action.payload) {
+    const sessions: ApiResponse<PaginatedResponse<Session>>  = yield SessionApi.getSessionsByBuild(
+      action.payload,
+    );
+    if (sessions.success) {
+      yield put(
+        fetchSessionSuccess({
+          count: sessions.result.count,
+          rows: sessions.result.rows,
+        }),
+      );
+    }
+  }
+}
+
 function* fetchSession(action: ReduxActionType<string>) {
   if (action.payload) {
     const sessions: ApiResponse<Session> = yield SessionApi.getSessionById(
@@ -149,6 +165,7 @@ function* runDriverScript(
 export default function* () {
   yield all([
     takeEvery(ReduxActionTypes.FETCH_SESSIONS_INIT, fetchSessions),
+    takeEvery(ReduxActionTypes.FETCH_SESSIONS_BY_BUILD_ID, fetchAllSessionsByBuild),
     takeLatest(ReduxActionTypes.FETCH_SESSION, fetchSession),
     takeLatest(ReduxActionTypes.FETCH_SESSION_TEXT_LOG, fetchSessionTextLog),
     takeLatest(

@@ -6,3 +6,7 @@ export const getSessionFilterCount = (state: AppState): number => {
 };
 
 export const getSessionFilters = (state: AppState) => state.ui.filter.session;
+
+export const getBuildFilterCount = (state: AppState): number => {
+  return 0;
+};

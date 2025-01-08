@@ -90,9 +90,11 @@ function getFiltersFromQueryParams(searchQuery: string) {
   );
 }
 
+
 export default function SessionList() {
-  const dispatch = useDispatch();
+
   const sessions = useSelector(getSessions);
+  const dispatch = useDispatch();
   const isLoading = useSelector(getIsSessionsLoading);
   const SelectedSession = useSelector(getSelectedSession);
   const urlFilters = getFiltersFromQueryParams(window.location.search);
@@ -105,13 +107,13 @@ export default function SessionList() {
     }
   }, []);
 
-  useEffect(() => {
-    dispatch(addPollingTask(fetchSessionInit()));
-
-    return () => {
-      dispatch(removePollingTask(fetchSessionInit()));
-    };
-  }, []);
+  // useEffect(() => {
+  //   dispatch(addPollingTask(fetchSessionInit()));
+  //
+  //   return () => {
+  //     dispatch(removePollingTask(fetchSessionInit()));
+  //   };
+  // }, []);
 
   const setFilter = useCallback((payload) => {
     dispatch(setSessionFilter(payload));
@@ -173,7 +175,7 @@ export default function SessionList() {
           scrollable
         >
           <List>
-            {sessions.length > 0 ? (
+            {sessions && sessions.length > 0 ? (
               <>
                 {sessions.map((session: Session) => (
                   <SessionCard

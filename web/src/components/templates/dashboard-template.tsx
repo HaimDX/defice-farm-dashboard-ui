@@ -17,6 +17,7 @@ import SerialLayout, { Row } from "../UI/layouts/serial-layout";
 import AppHeader from "../UI/organisms/app-header";
 import SessionDetails from "../UI/organisms/session-details";
 import SessionList from "../UI/organisms/session-list";
+import BuildList from "../UI/organisms/build/build-list";
 
 function extractSessionidFromUrl(url: string): string | null {
   const matches = url.match(new RegExp(/dashboard\/session\/(.*)/));
@@ -50,10 +51,19 @@ export default function DashboardTemplate() {
       </Row>
       <Row height={`calc(100vh - ${APP_HEADER_HEIGHT}px)`}>
         <ParallelLayout>
+
+          {/** Build List View **/}
+          <Column grid={2.5}>
+            <BuildList />
+          </Column>
+
+          {/** Sessions List View **/}
           <Column grid={2.5}>
             <SessionList />
           </Column>
-          <Column grid={9.5}>
+
+          {/** Session Details View **/}
+          <Column grid={7.5}>
             <Router history={history}>
               <Switch>
                 <Route>
