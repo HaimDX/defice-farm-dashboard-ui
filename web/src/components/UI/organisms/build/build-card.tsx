@@ -18,6 +18,18 @@ import {
   fetchSessionByBuildId,
 } from "../../../../store/actions/session-actions";
 
+const getBuildStatusIcon = (build: Build) => {
+  const { session } = build;
+
+  if (session.running > 0 ) {
+    return <Spinner size="M" />;
+  } else if (session.failed > 0 || session.timeout > 0 ) {
+    return <Icon name="exclamation" size={Sizes.XL} color="red" />;
+  } else{
+    return <Icon name="success" size={Sizes.XL} color="green" />;
+  }
+};
+
 const Container = styled.div`
   padding: 10px 15px;
   border-bottom: 1px solid
@@ -97,7 +109,7 @@ export default function BuildCard(props: PropsType) {
       }}
     >
       <ParallelLayout>
-        <Column grid={11}>
+        <Column grid={9}>
           <SerialLayout>
             <Row padding="10px 30px 10px 0">
               <Name>{build_name}</Name>
@@ -121,11 +133,16 @@ export default function BuildCard(props: PropsType) {
             </Row>
           </SerialLayout>
         </Column>
-        <Column grid={1}>
+
+        <Column grid={3}>
           <Centered>
-            <>{session.total} tests</>
+            <ParallelLayout>
+              <div style={ {paddingRight : '5px'}}>{session.total} tests</div>
+              <div>{getBuildStatusIcon(build)}</div>
+            </ParallelLayout>
           </Centered>
         </Column>
+
       </ParallelLayout>
     </Container>
   );
