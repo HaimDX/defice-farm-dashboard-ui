@@ -56,6 +56,7 @@ export class BuildController extends BaseController {
           build_id: build.build_id,
           build_name: build.name ? build.name : 'undefined build ',
           project_name: build.project ? build.project.name : 'undefined project',
+          platform_name: build.sessions[0].platform_name,
           created_at: build.created_at
         }
       );

@@ -8,7 +8,10 @@ import {
   useHistory,
   useLocation,
 } from "react-router-dom";
-import { getSessionDetailsUrl } from "../../constants/routes";
+import {
+  getBuildDetailsUrl,
+  getSessionDetailsUrl
+} from "../../constants/routes";
 import { APP_HEADER_HEIGHT } from "../../constants/ui";
 import { setSelectedSession } from "../../store/actions/session-actions";
 import { getSessions } from "../../store/selectors/entities/sessions-selector";
@@ -18,9 +21,16 @@ import AppHeader from "../UI/organisms/app-header";
 import SessionDetails from "../UI/organisms/session-details";
 import SessionList from "../UI/organisms/session-list";
 import BuildList from "../UI/organisms/build/build-list";
+import { getBuilds } from "../../store/selectors/entities/builds-selector";
+import { setSelectedBuild } from "../../store/actions/build-actions";
 
 function extractSessionidFromUrl(url: string): string | null {
   const matches = url.match(new RegExp(/dashboard\/session\/(.*)/));
+  return matches?.length ? matches[1] : null;
+}
+
+function extractBuildidFromUrl(url: string): string | null {
+  const matches = url.match(new RegExp(/dashboard\/builds\/([a-f0-9\-]{36})\/sessions/));
   return matches?.length ? matches[1] : null;
 }
 
@@ -30,6 +40,9 @@ export default function DashboardTemplate() {
   const location = useLocation();
   const sessions = useSelector(getSessions);
   const session_id = extractSessionidFromUrl(location.pathname);
+
+  const builds = useSelector(getBuilds);
+  const build_id = extractBuildidFromUrl(location.pathname);
 
   useEffect(() => {
     const SelectedSession = !!session_id
@@ -43,6 +56,19 @@ export default function DashboardTemplate() {
       dispatch(setSelectedSession(SelectedSession));
     }
   }, [session_id, sessions]);
+
+  useEffect(() => {
+    const selectedBuild = !!build_id
+      ? builds.find((d) => d.build_id === build_id) || builds[0]
+      : builds[0];
+
+    if (selectedBuild) {
+      if (build_id && build_id != selectedBuild.build_id) {
+        history.push(getBuildDetailsUrl(selectedBuild.build_id));
+      }
+      dispatch(setSelectedBuild(selectedBuild));
+    }
+  }, [build_id, builds]);
 
   return (
     <SerialLayout>

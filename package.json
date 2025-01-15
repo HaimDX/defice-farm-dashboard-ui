@@ -1,10 +1,9 @@
 {
   "name": "appium-dashboard-tractive",
   "version": "1.2.0",
-  "description": "Appium plugin to view session execution details via detailed dashboard",
+  "description": "Appium plugin to view mobile tests on the device farm",
   "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "sequelize:migrate": "sequelize-cli db:migrate",
     "sequelize:migrate:undo": "sequelize-cli db:migrate:undo",
     "clean:cache": "node ./scripts/cleanup-cache-dir.js",
@@ -21,10 +20,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/sudharsan-selvaraj/appium-dashboard-plugin/issues"
-  },
-  "homepage": "https://github.com/sudharsan-selvaraj/appium-dashboard-plugin#readme",
   "appium": {
     "pluginName": "appium-dashboard-tractive",
     "mainClass": "AppiumDashboardPlugin"

@@ -15,11 +15,7 @@ import SerialLayout, { Row } from "../../layouts/serial-layout";
 import Centered from "../../molecules/centered";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getSessions
-} from "../../../../store/selectors/entities/sessions-selector";
-import {
   fetchSessionByBuildId,
-  fetchSessionInit
 } from "../../../../store/actions/session-actions";
 
 const Container = styled.div`
@@ -40,9 +36,32 @@ const Container = styled.div`
   }
 `;
 
+const TextWithIcon = styled.div`
+  font-size: 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+
+  & > span {
+    padding-right: 5px;
+  }
+`;
+
+const DeviceName = styled(TextWithIcon)`
+  color: ${(props) => props.theme.colors.greyscale[2]};
+  font-weight: 500;
+  max-width: 120px;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
 const Name = styled.div`
   font-weight: 400;
-  font-size: 13px;
+  font-size: 11px;
   text-transform: capitalize;
 `;
 
@@ -63,16 +82,15 @@ function getDuration(startDate: Date) {
 }
 
 export default function BuildCard(props: PropsType) {
-  const { build } = props;
-  const { build_id, build_name , created_at, session } = build;
-
+  const { build , selected } = props;
+  const { build_id, build_name , created_at, session, platform_name } = build;
   const dispatch = useDispatch();
   const formattedStartTime = getDuration(created_at);
   const history = useHistory();
 
   return (
     <Container
-      className={props.selected ? "active" : ""}
+      className={selected ? "active" : ""}
       onClick={() => {
         history.push(getBuildDetailsUrl(build_id));
         dispatch(fetchSessionByBuildId(build_id));
@@ -86,9 +104,19 @@ export default function BuildCard(props: PropsType) {
             </Row>
             <Row padding="0 0 5px 0">
               <ParallelLayout>
-                <Column grid={12}>
+                <Column grid={4}>
                   <ExecutionTime>{formattedStartTime} ago</ExecutionTime>
                 </Column>
+
+                <Column grid={4}>
+                  <Tooltip title="the test platform" arrow={true}>
+                    <DeviceName>
+                      <Icon name={platform_name.toLowerCase()} />
+                      {platform_name}
+                    </DeviceName>
+                  </Tooltip>
+                </Column>
+
               </ParallelLayout>
             </Row>
           </SerialLayout>
