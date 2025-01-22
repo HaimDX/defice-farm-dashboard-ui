@@ -20,21 +20,13 @@ export const PROJECT = [
   },
 ]
 
-export const STATUS = [
+export const USER = [
   {
-    label: "RUNNING",
-    value: "running",
+    label: "anass.arakia@tractive.com",
+    value: "anass.arakia@tractive.com",
   },
   {
-    label: "PASSED",
-    value: "passed",
+    label: "Jenkins",
+    value: "jenkins",
   },
-  {
-    label: "FAILED",
-    value: "failed",
-  },
-  {
-    label: "TIMEOUT",
-    value: "timeout",
-  },
-];
+]

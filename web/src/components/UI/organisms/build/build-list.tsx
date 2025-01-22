@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import EmptyMessage from "../../molecules/empty-message";
 import SerialLayout, { Row } from "../../layouts/serial-layout";
@@ -25,6 +25,18 @@ import {
 } from "../../../../store/actions/build-actions";
 import Build from "../../../../interfaces/build";
 import BuildCard from "./build-card";
+import ParallelLayout, { Column } from "../../layouts/parallel-layout";
+import Dropdown from "../../atoms/dropdown";
+import Icon, { Sizes } from "../../atoms/icon";
+import Spinner from "../../atoms/spinner";
+import {
+  getBuildFilterCount
+} from "../../../../store/selectors/ui/filter-selector";
+import { Badge } from "@material-ui/core";
+import {
+  getIsSessionsLoading
+} from "../../../../store/selectors/entities/sessions-selector";
+import BuildListFilter from "./build-list-filter";
 
 const Container = styled.div`
   border-right: 1px solid #ced8e1;
@@ -36,6 +48,24 @@ const List = styled.div``;
 const Header = styled.div`
   ${(props) => getHeaderStyle(props.theme)};
   padding: 7px 5px;
+`;
+
+const FilterTrigger = styled.div`
+  padding: 10px;
+`;
+
+const FilterTriggerLabel = styled.div`
+  display: inline-block;
+  font-size: 13px;
+  padding-left: 4px;
+`;
+
+const FilterDropdown = styled.div``;
+
+const StyledBadge = styled(Badge)`
+  positive: relative;
+  left: 17px;
+  top: -2px;
 `;
 
 function getFiltersFromQueryParams(searchQuery: string) {
@@ -78,21 +108,7 @@ export default function BuildList() {
     }
   }, []);
 
-  useEffect(() => {
-    dispatch(addPollingTask(fetchBuildInit()));
 
-    return () => {
-      dispatch(removePollingTask(fetchBuildInit()));
-    };
-  }, []);
-
-  const setFilter = useCallback((payload) => {
-    dispatch(setBuildFilter(payload));
-
-    /* Reset session polling with newly applied filters */
-    dispatch(removePollingTask(fetchBuildInit()));
-    dispatch(addPollingTask(fetchBuildInit(payload)));
-  }, []);
 
   useEffect(() => {
     if (!selectedBuild) {
@@ -102,22 +118,63 @@ export default function BuildList() {
 
 
   /** Add polling for builds **/
+  useEffect(() => {
+    dispatch(addPollingTask(fetchBuildInit()));
 
-  // useEffect(() => {
-  //   dispatch(addPollingTask(fetchSessionInit()));
-  //
-  //   return () => {
-  //     dispatch(removePollingTask(fetchSessionInit()));
-  //   };
-  // }, []);
+    return () => {
+      dispatch(removePollingTask(fetchBuildInit()));
+    };
+  }, []);
 
+  /**
+   * Filters
+   */
+  const isLoading = useSelector(getIsSessionsLoading);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const filterCount = useSelector(getBuildFilterCount);
+
+  const setFilter = useCallback((payload) => {
+    dispatch(setBuildFilter(payload));
+
+    /* Reset session polling with newly applied filters */
+    dispatch(removePollingTask(fetchBuildInit()));
+    dispatch(addPollingTask(fetchBuildInit(payload)));
+  }, []);
 
   return (
     <Container>
       <SerialLayout>
         <Row height={`${SUB_APP_HEADER_HEIGHT}px`}>
           <Header>
-            <span>Builds</span>
+            <ParallelLayout>
+              <Column grid={10}>
+                <Dropdown
+                  controlled
+                  onOpen={() => setIsFilterOpen(true)}
+                  onClose={() => setIsFilterOpen(false)}
+                  open={isFilterOpen}
+                >
+                  <FilterTrigger>
+                    <Icon name="filter" size={Sizes.S} />
+                    <FilterTriggerLabel>FILTERS</FilterTriggerLabel>
+                    <StyledBadge badgeContent={filterCount} color="secondary" />
+                  </FilterTrigger>
+                  <FilterDropdown>
+                    <BuildListFilter
+                      onApply={(payload) => {
+                        setFilter(payload);
+                        setIsFilterOpen(false);
+                      }}
+                    />
+                  </FilterDropdown>
+                </Dropdown>
+              </Column>
+              {isLoading ? (
+                <Column grid={2}>
+                  <Spinner />
+                </Column>
+              ) : null}
+            </ParallelLayout>
           </Header>
         </Row>
         <Row

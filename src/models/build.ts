@@ -37,6 +37,12 @@ class Build extends Model<Build> {
   })
   name!: string;
 
+  @AllowNull(true)
+  @Column({
+    type: DataTypes.STRING,
+  })
+  user!: string;
+
   @HasMany(() => Session, { sourceKey: "build_id" })
   sessions!: Session[];
 

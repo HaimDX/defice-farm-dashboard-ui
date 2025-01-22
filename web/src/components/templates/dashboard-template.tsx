@@ -29,7 +29,7 @@ function extractSessionidFromUrl(url: string): string | null {
   return matches?.length ? matches[1] : null;
 }
 
-function extractBuildidFromUrl(url: string): string | null {
+function extractBuildIdFromUrl(url: string): string | null {
   const matches = url.match(new RegExp(/dashboard\/builds\/([a-f0-9\-]{36})\/sessions/));
   return matches?.length ? matches[1] : null;
 }
@@ -42,7 +42,7 @@ export default function DashboardTemplate() {
   const session_id = extractSessionidFromUrl(location.pathname);
 
   const builds = useSelector(getBuilds);
-  const build_id = extractBuildidFromUrl(location.pathname);
+  const build_id = extractBuildIdFromUrl(location.pathname);
 
   useEffect(() => {
     const SelectedSession = !!session_id
@@ -82,11 +82,15 @@ export default function DashboardTemplate() {
           <Column grid={2.5}>
             <BuildList />
           </Column>
+          {/** End Build List View **/}
+
 
           {/** Sessions List View **/}
           <Column grid={2.5}>
             <SessionList />
           </Column>
+          {/** End Session List View **/}
+
 
           {/** Session Details View **/}
           <Column grid={7.5}>
@@ -98,6 +102,9 @@ export default function DashboardTemplate() {
               </Switch>
             </Router>
           </Column>
+          {/** End Session Details View **/}
+
+
         </ParallelLayout>
       </Row>
     </SerialLayout>

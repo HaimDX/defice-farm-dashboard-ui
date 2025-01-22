@@ -37,5 +37,6 @@ export default function* () {
   yield all([
     takeEvery(ReduxActionTypes.FETCH_BUILD_INIT, fetchBuilds),
     takeLatest(ReduxActionTypes.FETCH_BUILD, fetchBuild),
+    takeLatest(ReduxActionTypes.SET_BUILD_FILTER, fetchBuilds),
   ]);
 }

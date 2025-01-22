@@ -63,7 +63,7 @@ const TextWithIcon = styled.div`
 
 const DeviceName = styled(TextWithIcon)`
   color: ${(props) => props.theme.colors.greyscale[2]};
-  font-weight: 500;
+  font-weight: 400;
   max-width: 120px;
   display: block;
   overflow: hidden;
@@ -114,8 +114,10 @@ export default function BuildCard(props: PropsType) {
             <Row padding="10px 30px 10px 0">
               <Name>{build_name}</Name>
             </Row>
+
             <Row padding="0 0 5px 0">
               <ParallelLayout>
+
                 <Column grid={4}>
                   <ExecutionTime>{formattedStartTime} ago</ExecutionTime>
                 </Column>
@@ -128,7 +130,6 @@ export default function BuildCard(props: PropsType) {
                     </DeviceName>
                   </Tooltip>
                 </Column>
-
               </ParallelLayout>
             </Row>
           </SerialLayout>
@@ -144,6 +145,9 @@ export default function BuildCard(props: PropsType) {
         </Column>
 
       </ParallelLayout>
+      <Column grid={12}>
+          <span>By <strong>{build.user}</strong></span>
+      </Column>
     </Container>
   );
 }

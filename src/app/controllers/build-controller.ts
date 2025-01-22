@@ -14,7 +14,7 @@ export class BuildController extends BaseController {
   }
 
   public async getBuilds(request: Request, response: Response, next: NextFunction) {
-    let { created_at, name } = request.query as any;
+    let { created_at, name , user } = request.query as any;
     let filter: any = {};
     if (created_at) {
       filter.created_at = { [Op.gte]: new Date(created_at) };
@@ -22,6 +22,11 @@ export class BuildController extends BaseController {
     if (name) {
       filter.name = {
         [Op.like]: `%${name.trim()}%`,
+      };
+    }
+    if (user) {
+      filter.user = {
+        [Op.like]: `%${user.trim()}%`,
       };
     }
     let builds = await Build.findAndCountAll({
@@ -53,6 +58,7 @@ export class BuildController extends BaseController {
         {},
         {
           session: sessionInfo,
+          user : build.user || 'undefined user',
           build_id: build.build_id,
           build_name: build.name ? build.name : 'undefined build ',
           project_name: build.project ? build.project.name : 'undefined project',

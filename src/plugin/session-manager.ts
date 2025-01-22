@@ -243,7 +243,7 @@ class SessionManager {
         project = await getOrCreateNewProject({ projectName });
       }
       if (buildName) {
-        build = await getOrCreateNewBuild({ buildName, projectId: project?.id });
+        build = await getOrCreateNewBuild({ buildName, projectId: project?.id , user : user || 'unknown user'});
       }
 
       await this.initializeScreenShotFolder();

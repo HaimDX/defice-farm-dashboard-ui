@@ -10,8 +10,15 @@ export type SessionFilterType = {
   user: Array<string>;
 };
 
+export type BuildFilterType = {
+  user : string;
+  project : Array<string>;
+  platform_name : Array<string>;
+}
+
 export type FilterState = {
   session: SessionFilterType;
+  build: BuildFilterType;
 };
 
 const initialState: FilterState = {
@@ -22,6 +29,11 @@ const initialState: FilterState = {
     device_udid: "",
     user: [],
   },
+  build : {
+    user : "",
+    project : [],
+    platform_name : [],
+  }
 };
 
 export default createReducer(initialState, {
@@ -31,5 +43,12 @@ export default createReducer(initialState, {
   ) => ({
     ...state,
     session: action.payload,
+  }),
+  [ReduxActionTypes.SET_BUILD_FILTER]: (
+    state: FilterState,
+    action: ReduxActionType<BuildFilterType>,
+  ) => ({
+    ...state,
+    build: action.payload,
   }),
 });
