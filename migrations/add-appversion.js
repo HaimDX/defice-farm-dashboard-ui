@@ -5,7 +5,7 @@ module.exports = {
     return promise.each(
       [
         function () {
-          return queryInterface.addColumn("builds", "user", {
+          return queryInterface.addColumn("session", "app_version", {
             type: Sequelize.TEXT,
             allowNull: true,
           });
@@ -21,7 +21,7 @@ module.exports = {
     return promise.each(
       [
         function () {
-          return queryInterface.removeColumn("builds", "user");
+          return queryInterface.removeColumn("session", "app_version");
         },
       ],
       function (action) {

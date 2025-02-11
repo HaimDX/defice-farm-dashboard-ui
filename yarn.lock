@@ -2260,13 +2260,25 @@ buffer-from@^1.0.0:
   resolved "https://registry.npmjs.org/buffer-from/-/buffer-from-1.1.2.tgz"
   integrity sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==
 
-buffer@^5.2.0, buffer@^5.2.1, buffer@^5.5.0:
+buffer@^5.1.0, buffer@^5.2.0, buffer@^5.2.1, buffer@^5.4.3, buffer@^5.5.0:
   version "5.7.1"
   resolved "https://registry.npmjs.org/buffer/-/buffer-5.7.1.tgz"
   integrity sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==
   dependencies:
     base64-js "^1.3.1"
     ieee754 "^1.1.13"
+
+bufferpack@0.0.6:
+  version "0.0.6"
+  resolved "https://registry.npmjs.org/bufferpack/-/bufferpack-0.0.6.tgz"
+  integrity sha512-MTWvLHElqczrIVhge9qHtqgNigJFyh0+tCDId5yCbFAfuekHWIG+uAgvoHVflwrDPuY/e47JE1ki5qcM7w4uLg==
+
+bytebuffer@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.npmjs.org/bytebuffer/-/bytebuffer-5.0.1.tgz"
+  integrity sha512-IuzSdmADppkZ6DlpycMkm8l9zeEq16fWtLvunEwFiYciR/BHo4E8/xs5piFquG+Za8OWmMqHF8zuRviz2LHvRQ==
+  dependencies:
+    long "~3"
 
 bytes@3.1.2:
   version "3.1.2"
@@ -2337,6 +2349,16 @@ camelcase@^5.0.0:
   version "5.3.1"
   resolved "https://registry.npmjs.org/camelcase/-/camelcase-5.3.1.tgz"
   integrity sha512-L28STB170nwWS63UjtlEOE3dldQApaJXZkOI1uMFfzf3rRuPegHaHesyee+YxQ+W6SvRDQV6UrdOdRiR153wJg==
+
+cgbi-to-png@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.npmjs.org/cgbi-to-png/-/cgbi-to-png-1.0.7.tgz"
+  integrity sha512-YR80kxTPuq9oRpZUdQmNEQWrmTKLINk1cfLVfyrV7Rfr9KLtLJdcockPKbreIr4JYAq+DhHBR7w+WA/tF5VDaQ==
+  dependencies:
+    bufferpack "0.0.6"
+    crc "^3.3.0"
+    stream-to-buffer "^0.1.0"
+    streamifier "^0.1.1"
 
 chalk@^2.0.0:
   version "2.4.2"
@@ -2638,6 +2660,13 @@ crc-32@^1.2.0:
   dependencies:
     exit-on-epipe "~1.0.1"
     printj "~1.1.0"
+
+crc@^3.3.0:
+  version "3.8.0"
+  resolved "https://registry.npmjs.org/crc/-/crc-3.8.0.tgz"
+  integrity sha512-iX3mfgcTMIq3ZKLIsVFAbv7+Mc10kxabAGQb8HvjA1o3T1PIYprbakQ65d3I+2HGHt6nSKkM9PYjgoJO2KcFBQ==
+  dependencies:
+    buffer "^5.1.0"
 
 crc32-stream@^4.0.2:
   version "4.0.2"
@@ -4207,6 +4236,11 @@ lokijs@^1.5.12:
   resolved "https://registry.npmjs.org/lokijs/-/lokijs-1.5.12.tgz"
   integrity sha512-Q5ALD6JiS6xAUWCwX3taQmgwxyveCtIIuL08+ml0nHwT3k0S/GIFJN+Hd38b1qYIMaE5X++iqsqWVksz7SYW+Q==
 
+long@~3:
+  version "3.2.0"
+  resolved "https://registry.npmjs.org/long/-/long-3.2.0.tgz"
+  integrity sha512-ZYvPPOMqUwPoDsbJaR10iQJYnMuZhRTvHYl62ErLIEX7RgFlziSBUUvrt3OVfc47QlHHpzPZYP17g3Fv7oeJkg==
+
 lowercase-keys@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/lowercase-keys/-/lowercase-keys-2.0.0.tgz"
@@ -5311,6 +5345,17 @@ regenerator-runtime@^0.13.3, regenerator-runtime@^0.13.4:
   resolved "https://registry.npmjs.org/regenerator-runtime/-/regenerator-runtime-0.13.9.tgz"
   integrity sha512-p3VT+cOEgxFsRRA9X4lkI1E+k2/CtnKtU4gcxyaCUreilL/vqI6CdZ3wxVUx3UOUg+gnUOQQcRI7BmSI656MYA==
 
+reiko-parser@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.npmjs.org/reiko-parser/-/reiko-parser-1.0.8.tgz"
+  integrity sha512-v/AFeCaqec8mzuAXIuQm/2rDGEIGzhlkxcMuUyLDPoCctw7wMplDscwXcXGqNsxJcCOiSNkUVNItVv+DhwbYRg==
+  dependencies:
+    buffer "^5.4.3"
+    bytebuffer "^5.0.1"
+    cgbi-to-png "^1.0.7"
+    xmldom "^0.1.27"
+    yauzl "^2.10.0"
+
 require-directory@^2.1.1:
   version "2.1.1"
   resolved "https://registry.npmjs.org/require-directory/-/require-directory-2.1.1.tgz"
@@ -5795,6 +5840,23 @@ stream-combiner@^0.2.2:
   dependencies:
     duplexer "~0.1.1"
     through "~2.3.4"
+
+stream-to-buffer@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.npmjs.org/stream-to-buffer/-/stream-to-buffer-0.1.0.tgz"
+  integrity sha512-Da4WoKaZyu3nf+bIdIifh7IPkFjARBnBK+pYqn0EUJqksjV9afojjaCCHUemH30Jmu7T2qcKvlZm2ykN38uzaw==
+  dependencies:
+    stream-to "~0.2.0"
+
+stream-to@~0.2.0:
+  version "0.2.2"
+  resolved "https://registry.npmjs.org/stream-to/-/stream-to-0.2.2.tgz"
+  integrity sha512-Kg1BSDTwgGiVMtTCJNlo7kk/xzL33ZuZveEBRt6rXw+f1WLK/8kmz2NVCT/Qnv0JkV85JOHcLhD82mnXsR3kPw==
+
+streamifier@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.npmjs.org/streamifier/-/streamifier-0.1.1.tgz"
+  integrity sha512-zDgl+muIlWzXNsXeyUfOk9dChMjlpkq0DRsxujtYPgyJ676yQ8jEm6zzaaWHFDg5BNcLuif0eD2MTyJdZqXpdg==
 
 streamx@^2.15.0:
   version "2.15.6"
@@ -6570,6 +6632,11 @@ xmlbuilder@~11.0.0:
   version "11.0.1"
   resolved "https://registry.npmjs.org/xmlbuilder/-/xmlbuilder-11.0.1.tgz"
   integrity sha512-fDlsI/kFEx7gLvbecc0/ohLG50fugQp8ryHzMTuW9vSa1GJ0XYWKnhsUx7oie3G98+r56aTQIUB4kht42R3JvA==
+
+xmldom@^0.1.27:
+  version "0.1.31"
+  resolved "https://registry.npmjs.org/xmldom/-/xmldom-0.1.31.tgz"
+  integrity sha512-yS2uJflVQs6n+CyjHoaBmVSqIDevTAWrzMmjG1Gc7h1qQ7uVozNhEPJAwZXWyGQ/Gafo3fCwrcaokezLPupVyQ==
 
 xpath@^0.x:
   version "0.0.34"

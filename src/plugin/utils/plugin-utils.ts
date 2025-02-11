@@ -5,6 +5,8 @@ import { DashboardCommands } from "../dashboard-commands";
 import { IHttpLogger } from "../interfaces/http-logger";
 import { AndroidNetworkProfiler } from "../http-logger/android-http-logger";
 import { IosNetworkProfiler } from "../http-logger/ios-http-logger";
+import { ANDROID_STAGE_APP_PATH, IOS_STAGE_APP_PATH } from "../constant";
+import { pluginLogger } from "../../loggers/plugin-logger";
 
 enum PLATFORM {
   ANDROID = "android",
@@ -188,6 +190,48 @@ function getWdioServerOpts(driver: any) {
   };
 }
 
+async function getAppVersion(platformName: string): Promise<string | null> {
+  const PkgReader = require('reiko-parser');
+
+  pluginLogger.info(`Trying to determine the app under test version`);
+
+  if (platformName === "ANDROID") {
+    pluginLogger.info(`Reading Android apk info`);
+    const reader = new PkgReader(ANDROID_STAGE_APP_PATH, 'apk', { withIcon: false });
+
+    return new Promise((resolve, reject) => {
+      reader.parse((err: any, pkgInfo: any) => {
+        if (err) {
+          pluginLogger.info(`Error reading app information`);
+          console.log(err);
+          reject(err);
+        } else {
+          pluginLogger.info(`Successfully read Android app information`);
+          resolve(pkgInfo?.versionName ?? null);
+        }
+      });
+    });
+  } else {
+    pluginLogger.info(`Reading iOS ipa info`);
+    const reader = new PkgReader(IOS_STAGE_APP_PATH, 'ipa', { withIcon: false });
+
+    return new Promise((resolve, reject) => {
+      reader.parse((err: any, pkgInfo: any) => {
+        if (err) {
+          pluginLogger.info(`Error reading app information`);
+          console.log(err);
+          reject(err);
+        } else {
+          pluginLogger.info(`Successfully read iOS app information`);
+          console.log(pkgInfo);
+          resolve(pkgInfo?.CFBundleShortVersionString ?? null);
+        }
+      });
+    });
+  }
+}
+
+
 export {
   makeGETCall,
   makePostCall,
@@ -205,4 +249,5 @@ export {
   isHttpLogsSuppoted,
   getHttpLogger,
   getMjpegServerPort,
+  getAppVersion
 };

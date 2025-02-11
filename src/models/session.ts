@@ -190,6 +190,11 @@ class Session extends Model<Session> {
   })
   user?: string | null;
 
+  @AllowNull(true)
+  @Column({
+    type: DataTypes.TEXT,
+  })
+  app_version?: string | null;
   /********* END Custom Tractive Column *****************/
 
 

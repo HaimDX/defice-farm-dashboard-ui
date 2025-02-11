@@ -10,7 +10,7 @@ import {
   isAppProfilingSupported,
   isHttpLogsSuppoted,
   isAndroidSession,
-  getMjpegServerPort,
+  getMjpegServerPort, getAppVersion
 } from "./utils/plugin-utils";
 import {
   getLogs,
@@ -40,6 +40,7 @@ import { HttpLogs } from "../models/http-logs";
 import { DriverScriptExecutor } from "./script-executor/executor";
 
 const CREATE_SESSION = "createSession";
+
 
 class SessionManager {
   private lastLogLine = 0;
@@ -231,7 +232,14 @@ class SessionManager {
       let name = desired["dashboard:name"];
       let build, project;
 
-      /* Custom Tractive Caps */
+      /**
+       *
+       *
+       *
+       * Custom TRACTIVE Caps
+       *
+       *
+       * */
       let user = desired["dashboard:tractive-user"];
 
       let { is_profiling_available, device_info } = await this.startAppProfiling();
@@ -246,6 +254,24 @@ class SessionManager {
         build = await getOrCreateNewBuild({ buildName, projectId: project?.id , user : user || 'unknown user'});
       }
 
+      //Add app version
+      let appVersion;
+      try {
+        appVersion = await getAppVersion(this.sessionInfo.platform_name);
+        pluginLogger.info("App under test version is " + appVersion);
+      }catch (error){
+        pluginLogger.error("Could not determine app under test version");
+      }
+
+      /**
+       *
+       *
+       *
+       * END Custom TRACTIVE Caps
+       *
+       *
+       * */
+
       await this.initializeScreenShotFolder();
       await this.startScreenRecording(command.driver);
       await Session.create({
@@ -258,6 +284,7 @@ class SessionManager {
         name: name || null,
         live_stream_port: await getMjpegServerPort(command.driver, this.sessionInfo.session_id),
         user : user,
+        app_version : appVersion
       } as any);
 
       await this.saveCommandLog(command, null);

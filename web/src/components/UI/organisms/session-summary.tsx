@@ -62,6 +62,10 @@ const SUMMARY_CONFIG: any[] = [
     key: "udid",
   },
   {
+    label: "App Version",
+    key : "app_version"
+  },
+  {
     or: [
       {
         label: "App",
