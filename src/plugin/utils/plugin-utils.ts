@@ -223,7 +223,6 @@ async function getAppVersion(platformName: string): Promise<string | null> {
           reject(err);
         } else {
           pluginLogger.info(`Successfully read iOS app information`);
-          console.log(pkgInfo);
           resolve(pkgInfo?.CFBundleShortVersionString ?? null);
         }
       });
