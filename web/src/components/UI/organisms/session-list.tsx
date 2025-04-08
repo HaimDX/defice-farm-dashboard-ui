@@ -10,8 +10,9 @@ import {
 } from "../../../store/selectors/entities/sessions-selector";
 import { useCallback } from "react";
 import {
+  fetchSessionByBuildId,
   fetchSessionInit,
-  setSessionFilter,
+  setSessionFilter
 } from "../../../store/actions/session-actions";
 import Session from "../../../interfaces/session";
 import SessionCard from "./session-card";
@@ -34,6 +35,7 @@ import {
 } from "../../../store/actions/polling-actions";
 import ParallelLayout, { Column } from "../layouts/parallel-layout";
 import Spinner from "../atoms/spinner";
+import { extractBuildIdFromUrl } from "../../../utils/utility";
 
 const Container = styled.div`
   border-right: 1px solid #ced8e1;
@@ -98,12 +100,13 @@ export default function SessionList() {
   const isLoading = useSelector(getIsSessionsLoading);
   const SelectedSession = useSelector(getSelectedSession);
   const urlFilters = getFiltersFromQueryParams(window.location.search);
+  const build_id = extractBuildIdFromUrl(location.pathname);
 
   useEffect(() => {
     if (Object.keys(urlFilters).length) {
       setFilter(urlFilters);
     } else {
-      dispatch(fetchSessionInit());
+      dispatch(fetchSessionByBuildId(build_id));
     }
   }, []);
 
@@ -125,7 +128,7 @@ export default function SessionList() {
 
   useEffect(() => {
     if (!SelectedSession) {
-      dispatch(fetchSessionInit());
+      dispatch(fetchSessionByBuildId(build_id));
     }
   }, [SelectedSession]);
 

@@ -23,14 +23,10 @@ import SessionList from "../UI/organisms/session-list";
 import BuildList from "../UI/organisms/build/build-list";
 import { getBuilds } from "../../store/selectors/entities/builds-selector";
 import { setSelectedBuild } from "../../store/actions/build-actions";
+import { extractBuildIdFromUrl } from "../../utils/utility";
 
 function extractSessionidFromUrl(url: string): string | null {
   const matches = url.match(new RegExp(/dashboard\/session\/(.*)/));
-  return matches?.length ? matches[1] : null;
-}
-
-function extractBuildIdFromUrl(url: string): string | null {
-  const matches = url.match(new RegExp(/dashboard\/builds\/([a-f0-9\-]{36})\/sessions/));
   return matches?.length ? matches[1] : null;
 }
 
