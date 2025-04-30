@@ -23,9 +23,11 @@ const getBuildStatusIcon = (build: Build) => {
 
   if (session.running > 0 ) {
     return <Spinner size="M" />;
-  } else if (session.failed > 0 || session.timeout > 0 ) {
+  } else if (session.failed > 0) {
+    return <Icon name="error" size={Sizes.XL} color="red" />;
+  } else if (session.timeout > 0 ) {
     return <Icon name="exclamation" size={Sizes.XL} color="red" />;
-  } else{
+  } else {
     return <Icon name="success" size={Sizes.XL} color="green" />;
   }
 };
