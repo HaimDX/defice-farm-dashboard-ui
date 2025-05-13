@@ -251,7 +251,13 @@ class SessionManager {
         project = await getOrCreateNewProject({ projectName });
       }
       if (buildName) {
-        build = await getOrCreateNewBuild({ buildName, projectId: project?.id , user : user || 'unknown user'});
+        build = await getOrCreateNewBuild(
+          {
+            buildName,
+            projectId: project?.id ,
+            user : user || 'unknown user',
+            platformName : this.sessionInfo.platform_name || 'unknown platform',
+          });
       }
 
       //Add app version

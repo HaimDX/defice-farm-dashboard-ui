@@ -136,7 +136,7 @@ export default function BuildList() {
   const setFilter = useCallback((payload) => {
     dispatch(setBuildFilter(payload));
 
-    /* Reset session polling with newly applied filters */
+    /* Reset filters polling with newly applied filters */
     dispatch(removePollingTask(fetchBuildInit()));
     dispatch(addPollingTask(fetchBuildInit(payload)));
   }, []);

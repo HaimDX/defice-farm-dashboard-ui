@@ -48,6 +48,14 @@ class Build extends Model<Build> {
 
   @BelongsTo(() => Project)
   project!: Project;
+
+  @AllowNull(false)
+  @Column({
+    type: DataTypes.STRING,
+    unique: false,
+  })
+  platform_name!: string;
+
 }
 
 export { Build };

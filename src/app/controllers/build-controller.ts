@@ -14,7 +14,7 @@ export class BuildController extends BaseController {
   }
 
   public async getBuilds(request: Request, response: Response, next: NextFunction) {
-    let { created_at, name , user } = request.query as any;
+    let { created_at, name , user, platformName } = request.query as any;
     let filter: any = {};
     if (created_at) {
       filter.created_at = { [Op.gte]: new Date(created_at) };
@@ -27,6 +27,11 @@ export class BuildController extends BaseController {
     if (user) {
       filter.user = {
         [Op.like]: `%${user.trim()}%`,
+      };
+    }
+    if( platformName){
+      filter.platform_name = {
+        [Op.like]: `%${platformName.trim()}%`,
       };
     }
     let builds = await Build.findAndCountAll({
