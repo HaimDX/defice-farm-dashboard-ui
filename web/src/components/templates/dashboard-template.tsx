@@ -38,7 +38,7 @@ export default function DashboardTemplate() {
   const session_id = extractSessionidFromUrl(location.pathname);
 
   const builds = useSelector(getBuilds);
-  const build_id = extractBuildIdFromUrl(location.pathname);
+  const buildIdFromUrl = extractBuildIdFromUrl(location.pathname);
 
   useEffect(() => {
     const SelectedSession = !!session_id
@@ -54,17 +54,21 @@ export default function DashboardTemplate() {
   }, [session_id, sessions]);
 
   useEffect(() => {
-    const selectedBuild = !!build_id
-      ? builds.find((d) => d.build_id === build_id) || builds[0]
-      : builds[0];
+    // Only update builds selection if we are on a build page
+    if (!location.pathname.includes("/session/")) {
+      const selectedBuild = !!buildIdFromUrl
+        ? builds.find((d) => d.build_id === buildIdFromUrl) || builds[0]
+        : builds[0];
 
-    if (selectedBuild) {
-      if (build_id && build_id != selectedBuild.build_id) {
-        history.push(getBuildDetailsUrl(selectedBuild.build_id));
+      if (selectedBuild) {
+        if (buildIdFromUrl && buildIdFromUrl != selectedBuild.build_id) {
+          history.push(getBuildDetailsUrl(selectedBuild.build_id));
+        }
+        dispatch(setSelectedBuild(selectedBuild));
       }
-      dispatch(setSelectedBuild(selectedBuild));
     }
-  }, [build_id, builds]);
+
+  }, [buildIdFromUrl, builds]);
 
   return (
     <SerialLayout>

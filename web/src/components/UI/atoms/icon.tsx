@@ -6,7 +6,7 @@ import {
   FaCheckCircle,
   FaFilter,
   FaChevronDown,
-  FaChevronUp,
+  FaChevronUp, FaStop
 } from "react-icons/fa";
 import { FcAndroidOs } from "react-icons/fc";
 import {

@@ -290,7 +290,7 @@ class SessionManager {
         name: name || null,
         live_stream_port: await getMjpegServerPort(command.driver, this.sessionInfo.session_id),
         user : user,
-        app_version : appVersion
+        app_version : appVersion,
       } as any);
 
       await this.saveCommandLog(command, null);

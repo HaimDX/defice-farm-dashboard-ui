@@ -12,7 +12,7 @@ import {
   sessionStateChangeFinish,
   fetchSessionProfilingDataSuccess,
   fetchSessionHttpLogsSuccess,
-  sessionScriptExecutionFinish,
+  sessionScriptExecutionFinish, fetchSessionByBuildId
 } from "../actions/session-actions";
 import ReduxActionTypes from "../redux-action-types";
 import { omitBy } from "lodash";
@@ -31,19 +31,49 @@ function* fetchSessions(action?: ReduxActionType<Record<string, string>>) {
   }
 }
 
-function* fetchAllSessionsByBuild(action: ReduxActionType<string>) {
-  if (action.payload) {
-    const sessions: ApiResponse<PaginatedResponse<Session>>  = yield SessionApi.getSessionsByBuild(
-      action.payload,
+function* fetchAllSessionsByBuild(action: ReduxActionType<any>) {
+  if (!action || !action.payload) {
+    return;
+  }
+
+  const payload = action.payload;
+
+  if (!payload || !payload.buildId) {
+    console.warn("[fetchAllSessionsByBuild] Missing buildId, skipping fetch");
+    return;
+  }
+
+  let filters: Record<string, any> = {};
+  let buildId: string | undefined;
+
+  // ✅ Support both: string payload OR object payload
+  if (typeof payload === "string") {
+    buildId = payload;
+  } else if (typeof payload === "object") {
+    const { build_id, buildId: providedBuildId, ...rest } = payload;
+    buildId = providedBuildId;
+    filters = rest;
+  }
+
+  // 🚨 If no build id is provided, do nothing
+  if (!buildId) {
+    console.warn("[fetchAllSessionsByBuild] Missing build_id, skipping fetch");
+    return;
+  }
+
+  // 🛰️ Fetch sessions scoped to the build
+  const sessions: ApiResponse<PaginatedResponse<Session>> = yield SessionApi.getSessionsByBuild(
+    buildId,
+    filters
+  );
+
+  if (sessions && sessions.success) {
+    yield put(
+      fetchSessionSuccess({
+        count: sessions.result.count,
+        rows: sessions.result.rows,
+      })
     );
-    if (sessions.success) {
-      yield put(
-        fetchSessionSuccess({
-          count: sessions.result.count,
-          rows: sessions.result.rows,
-        }),
-      );
-    }
   }
 }
 
@@ -180,7 +210,7 @@ export default function* () {
     ),
     takeLatest(ReduxActionTypes.DELETE_SESSION, deleteSession),
     takeLatest(ReduxActionTypes.DELETE_ALL_SESSION, deleteAllSession),
-    takeLatest(ReduxActionTypes.SET_SESSION_FILTER, fetchSessions),
+    takeLatest(ReduxActionTypes.SET_SESSION_FILTER, fetchSessionByBuildId),
     takeLatest(ReduxActionTypes.PAUSE_SESSION, pauseSession),
     takeLatest(ReduxActionTypes.RESUME_SESSION, resumeSession),
     takeLatest(ReduxActionTypes.RUN_SCRIPT_FOR_SESSION, runDriverScript),

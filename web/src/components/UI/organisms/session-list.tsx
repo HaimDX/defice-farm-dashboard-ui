@@ -100,15 +100,18 @@ export default function SessionList() {
   const isLoading = useSelector(getIsSessionsLoading);
   const SelectedSession = useSelector(getSelectedSession);
   const urlFilters = getFiltersFromQueryParams(window.location.search);
-  const build_id = extractBuildIdFromUrl(location.pathname);
+  const buildId = extractBuildIdFromUrl(location.pathname);
 
   useEffect(() => {
     if (Object.keys(urlFilters).length) {
+      // apply filters scoped to the selected build
       setFilter(urlFilters);
     } else {
-      dispatch(fetchSessionByBuildId(build_id));
+      // fetch sessions for the selected build only
+      dispatch(fetchSessionByBuildId({ buildId }));
+      //dispatch(fetchSessionByBuildId(buildId));
     }
-  }, []);
+  }, [buildId]);
 
   // useEffect(() => {
   //   dispatch(addPollingTask(fetchSessionInit()));
@@ -119,18 +122,37 @@ export default function SessionList() {
   // }, []);
 
   const setFilter = useCallback((payload) => {
-    dispatch(setSessionFilter(payload));
+    // always merge current buildId into the payload
+    const finalPayload = {
+      ...payload,
+      buildId,
+    };
 
-    /* Reset session polling with newly applied filters */
-    dispatch(removePollingTask(fetchSessionInit()));
-    dispatch(addPollingTask(fetchSessionInit(payload)));
-  }, []);
+    dispatch(setSessionFilter(finalPayload));
+
+    // fetch sessions for the build with the filters applied (one-time fetch)
+    dispatch(fetchSessionByBuildId(finalPayload));
+  }, [buildId, dispatch]);
+
+  // const setFilter = useCallback((payload) => {
+  //   // Always include build_id in the filter when a build is selected
+  //   const finalPayload = {
+  //     ...payload,
+  //     build_id: buildId || undefined,
+  //   };
+  //
+  //   dispatch(setSessionFilter(finalPayload));
+  //
+  //   /* Reset session polling with newly applied filters */
+  //   dispatch(removePollingTask(fetchSessionInit()));
+  //   dispatch(addPollingTask(fetchSessionInit(finalPayload)));
+  // }, []);
 
   useEffect(() => {
     if (!SelectedSession) {
-      dispatch(fetchSessionByBuildId(build_id));
+      dispatch(fetchSessionByBuildId(buildId));
     }
-  }, [SelectedSession]);
+  }, [SelectedSession,buildId,dispatch]);
 
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const filterCount = useSelector(getSessionFilterCount);

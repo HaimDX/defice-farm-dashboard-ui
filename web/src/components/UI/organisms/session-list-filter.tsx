@@ -73,35 +73,7 @@ export default function SessionListFilter(props: Propstype) {
   return (
     <Container>
       <SerialLayout>
-        <Row padding="10px 0px">
-          <ParallelLayout>
-            <Column grid={6}>
-              <Label>Session ID:</Label>
-            </Column>
-            <Column grid={6}>
-              <Control>
-                <Input onChange={(e) => setName(e.target.value)} value={name} />
-              </Control>
-            </Column>
-          </ParallelLayout>
-        </Row>
-        <Row padding="10px 0px">
-          <ParallelLayout>
-            <Column grid={6}>
-              <Label>Platform:</Label>
-            </Column>
-            <Column grid={6}>
-              <Control>
-                <Select
-                  multiple={true}
-                  options={PLATFORM}
-                  onChange={(value) => setOs(value)}
-                  selected={os}
-                />
-              </Control>
-            </Column>
-          </ParallelLayout>
-        </Row>
+
         <Row padding="10px 0px">
           <ParallelLayout>
             <Column grid={6}>

@@ -155,6 +155,18 @@ export default function sessionMenuItems(props: PropsType) {
     }
   }
 
+  function showStopIcon(){
+    return <
+      IconContainer>
+      <Icon
+        name="stop"
+        tooltip = "terminate session"
+        size={Sizes.L}
+        onClick={() => alert("I was asked to terminate session")}
+      ></Icon>
+    </IconContainer>
+  }
+
   return (
     <Container>
       <ToastContainer />
@@ -164,7 +176,7 @@ export default function sessionMenuItems(props: PropsType) {
           (stateChangePending ? (
             <Spinner size={SpinnerSize.S} />
           ) : (
-            getPlayPauseIcon()
+            showStopIcon(), getPlayPauseIcon()
           ))}
 
         {!session.is_completed && getDebuggerIcon()}
@@ -173,14 +185,17 @@ export default function sessionMenuItems(props: PropsType) {
           (deletePending ? (
             <Spinner size={SpinnerSize.S} />
           ) : (
-            <IconContainer>
-              <Icon
-                name="delete"
-                tooltip="Delete"
-                size={Sizes.L}
-                onClick={() => onDelete(session.session_id)}
-              ></Icon>
-            </IconContainer>
+            <div>
+              <IconContainer>
+                <Icon
+                  name="delete"
+                  tooltip="Delete"
+                  size={Sizes.L}
+                  onClick={() => onDelete(session.session_id)}
+                ></Icon>
+              </IconContainer>
+            </div>
+
           ))}
       </IconGroup>
     </Container>
