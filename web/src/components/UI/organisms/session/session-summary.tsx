@@ -1,10 +1,10 @@
 import React from "react";
 import Moment from "react-moment";
-import CommonUtils from "../../../utils/common-utils";
-import Session from "../../../interfaces/session";
+import CommonUtils from "../../../../utils/common-utils";
+import Session from "../../../../interfaces/session";
 import styled from "styled-components";
-import ParallelLayout, { Column } from "../layouts/parallel-layout";
-import Icon, { Sizes } from "../atoms/icon";
+import ParallelLayout, { Column } from "../../layouts/parallel-layout";
+import Icon, { Sizes } from "../../atoms/icon";
 
 const SUMMARY_CONFIG: any[] = [
   {

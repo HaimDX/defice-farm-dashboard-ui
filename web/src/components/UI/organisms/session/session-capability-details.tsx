@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import TabsLayout, { Tab, TAB_HEADER_HEIGHT } from "../layouts/tab-layout";
-import Session from "../../../interfaces/session";
+import TabsLayout, { Tab, TAB_HEADER_HEIGHT } from "../../layouts/tab-layout";
+import Session from "../../../../interfaces/session";
 
 const Container = styled.div`
   word-break: break-word;

@@ -4,22 +4,22 @@ import styled from "styled-components";
 import {
   APP_HEADER_HEIGHT,
   SUB_APP_HEADER_HEIGHT,
-} from "../../../constants/ui";
-import { getSelectedSession } from "../../../store/selectors/entities/sessions-selector";
-import { getHeaderStyle } from "../../../utils/ui";
-import ParallelLayout, { Column } from "../layouts/parallel-layout";
-import SerialLayout, { Row } from "../layouts/serial-layout";
-import EmptyMessage from "../molecules/empty-message";
+} from "../../../../constants/ui";
+import { getSelectedSession } from "../../../../store/selectors/entities/sessions-selector";
+import { getHeaderStyle } from "../../../../utils/ui";
+import ParallelLayout, { Column } from "../../layouts/parallel-layout";
+import SerialLayout, { Row } from "../../layouts/serial-layout";
+import EmptyMessage from "../../molecules/empty-message";
 import SessionCapabilityDetails from "./session-capability-details";
 import SessionLogs from "./session-logs";
 import SessionSummary from "./session-summary";
 import SessionVideo from "./session-video";
 import chroma from "chroma-js";
-import Session from "../../../interfaces/session";
+import Session from "../../../../interfaces/session";
 import SessionMenuItems from "./session-details-menu-items";
 import { Tooltip } from "@mui/material";
 import SessionScriptExecutor from "./session-script-executor";
-import Icon, { Sizes } from "../atoms/icon";
+import Icon, { Sizes } from "../../atoms/icon";
 
 const Container = styled.div`
   @-webkit-keyframes progress {

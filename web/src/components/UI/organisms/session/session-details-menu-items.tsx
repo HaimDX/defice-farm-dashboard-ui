@@ -1,21 +1,21 @@
 import React, { useCallback, useEffect } from "react";
 import styled from "styled-components";
-import Session from "../../../interfaces/session";
-import Icon, { Sizes } from "../atoms/icon";
-import Spinner, { Sizes as SpinnerSize } from "../atoms/spinner";
+import Session from "../../../../interfaces/session";
+import Icon, { Sizes } from "../../atoms/icon";
+import Spinner, { Sizes as SpinnerSize } from "../../atoms/spinner";
 import { useDispatch, useSelector } from "react-redux";
 import {
   deleteSession,
   setSelectedSession,
   pauseSession,
   resumeSession,
-} from "../../../store/actions/session-actions";
+} from "../../../../store/actions/session-actions";
 import {
   isSessionDeleting,
   getSessionDeleteResponse,
   getSessionStateChangeResponse,
   isStateChangePending,
-} from "../../../store/selectors/entities/sessions-selector";
+} from "../../../../store/selectors/entities/sessions-selector";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 

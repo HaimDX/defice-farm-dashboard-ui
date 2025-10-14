@@ -2,20 +2,20 @@ import React, { useCallback, useEffect, useState } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import { js as jsBeautify } from "js-beautify";
 import { javascript } from "@codemirror/lang-javascript";
-import SerialLayout, { Row } from "../layouts/serial-layout";
-import Session from "../../../interfaces/session";
+import SerialLayout, { Row } from "../../layouts/serial-layout";
+import Session from "../../../../interfaces/session";
 import styled from "styled-components";
-import Icon, { Sizes as IconSize } from "../atoms/icon";
+import Icon, { Sizes as IconSize } from "../../atoms/icon";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getDriverScriptResult,
   isDriverScriptExecutionPending,
-} from "../../../store/selectors/entities/sessions-selector";
+} from "../../../../store/selectors/entities/sessions-selector";
 import {
   runDriverScript,
   sessionScriptExecutionReset,
-} from "../../../store/actions/session-actions";
-import Spinner, { Sizes } from "../atoms/spinner";
+} from "../../../../store/actions/session-actions";
+import Spinner, { Sizes } from "../../atoms/spinner";
 import _ from "lodash";
 
 const EDITOR_HEADER_HEIGHT_PX = 30;

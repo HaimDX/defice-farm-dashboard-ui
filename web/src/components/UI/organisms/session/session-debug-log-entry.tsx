@@ -2,9 +2,9 @@ import React from "react";
 import Moment from "react-moment";
 import styled from "styled-components";
 import { useState } from "react";
-import ParallelLayout, { Column } from "../layouts/parallel-layout";
-import Icon from "../atoms/icon";
-import CodeViewer from "../atoms/code-viewer";
+import ParallelLayout, { Column } from "../../layouts/parallel-layout";
+import Icon from "../../atoms/icon";
+import CodeViewer from "../../atoms/code-viewer";
 
 const Container = styled.div<{ expandable: boolean }>`
   padding: 10px;

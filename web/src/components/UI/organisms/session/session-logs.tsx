@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import Session from "../../../interfaces/session";
-import TabsLayout, { Tab } from "../layouts/tab-layout";
+import Session from "../../../../interfaces/session";
+import TabsLayout, { Tab } from "../../layouts/tab-layout";
 import SessionDebugLogs from "./session-debug-logs";
 import SessionDeviceLogs from "./session-device-logs";
 import SessionTextLogs from "./session-text-logs";

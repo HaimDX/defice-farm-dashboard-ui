@@ -4,13 +4,13 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { DEVICE_FILTERS, PLATFORM, STATUS } from "../../../constants/session";
-import { getSessionFilters } from "../../../store/selectors/ui/filter-selector";
-import Button from "../atoms/button";
-import Input from "../atoms/input";
-import Select from "../atoms/select";
-import ParallelLayout, { Column } from "../layouts/parallel-layout";
-import SerialLayout, { Row } from "../layouts/serial-layout";
+import { DEVICE_FILTERS, PLATFORM, STATUS } from "../../../../constants/session";
+import { getSessionFilters } from "../../../../store/selectors/ui/filter-selector";
+import Button from "../../atoms/button";
+import Input from "../../atoms/input";
+import Select from "../../atoms/select";
+import ParallelLayout, { Column } from "../../layouts/parallel-layout";
+import SerialLayout, { Row } from "../../layouts/serial-layout";
 
 const Container = styled.div`
   width: 400px;

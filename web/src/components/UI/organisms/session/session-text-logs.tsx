@@ -4,25 +4,25 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import Session from "../../../interfaces/session";
+import Session from "../../../../interfaces/session";
 import {
   addPollingTask,
   removePollingTask,
-} from "../../../store/actions/polling-actions";
-import { fetchSessionTextLogs } from "../../../store/actions/session-actions";
+} from "../../../../store/actions/polling-actions";
+import { fetchSessionTextLogs } from "../../../../store/actions/session-actions";
 import {
   getisTextLogsLoading,
   getTextLogs,
-} from "../../../store/selectors/entities/logs-selector";
-import { getHeaderStyle } from "../../../utils/ui";
-import CheckboxComponent from "../atoms/checkbox";
-import CheckBox from "../atoms/checkbox";
-import Spinner from "../atoms/spinner";
-import ParallelLayout, { Column } from "../layouts/parallel-layout";
-import SerialLayout, { Row } from "../layouts/serial-layout";
-import { TAB_HEADER_HEIGHT } from "../layouts/tab-layout";
-import Centered from "../molecules/centered";
-import EmptyMessage from "../molecules/empty-message";
+} from "../../../../store/selectors/entities/logs-selector";
+import { getHeaderStyle } from "../../../../utils/ui";
+import CheckboxComponent from "../../atoms/checkbox";
+import CheckBox from "../../atoms/checkbox";
+import Spinner from "../../atoms/spinner";
+import ParallelLayout, { Column } from "../../layouts/parallel-layout";
+import SerialLayout, { Row } from "../../layouts/serial-layout";
+import { TAB_HEADER_HEIGHT } from "../../layouts/tab-layout";
+import Centered from "../../molecules/centered";
+import EmptyMessage from "../../molecules/empty-message";
 import LogEntry from "./session-text-logs-entry";
 
 function useLogs(showScreenShots: boolean, showExceptions: boolean) {

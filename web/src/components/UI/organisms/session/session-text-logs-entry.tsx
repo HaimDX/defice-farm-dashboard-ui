@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import { useState } from "react";
-import SerialLayout, { Row } from "../layouts/serial-layout";
-import ParallelLayout, { Column } from "../layouts/parallel-layout";
-import Icon from "../atoms/icon";
-import CommonUtils from "../../../utils/common-utils";
-import CodeViewer from "../atoms/code-viewer";
+import SerialLayout, { Row } from "../../layouts/serial-layout";
+import ParallelLayout, { Column } from "../../layouts/parallel-layout";
+import Icon from "../../atoms/icon";
+import CommonUtils from "../../../../utils/common-utils";
+import CodeViewer from "../../atoms/code-viewer";
 import chroma from "chroma-js";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 

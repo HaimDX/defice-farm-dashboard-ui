@@ -3,19 +3,19 @@ import React, { useCallback, useEffect } from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import Session from "../../../interfaces/session";
-import { fetchSessionHttpLogs } from "../../../store/actions/session-actions";
+import Session from "../../../../interfaces/session";
+import { fetchSessionHttpLogs } from "../../../../store/actions/session-actions";
 import {
   getHttpLogs,
   getisHttpLogsLoading,
-} from "../../../store/selectors/entities/logs-selector";
-import Input from "../atoms/input";
-import Spinner from "../atoms/spinner";
-import ParallelLayout, { Column } from "../layouts/parallel-layout";
-import SerialLayout, { Row } from "../layouts/serial-layout";
-import Centered from "../molecules/centered";
-import HttpLogsTable from "./http-logs-table";
-import { TAB_HEADER_HEIGHT } from "../layouts/tab-layout";
+} from "../../../../store/selectors/entities/logs-selector";
+import Input from "../../atoms/input";
+import Spinner from "../../atoms/spinner";
+import ParallelLayout, { Column } from "../../layouts/parallel-layout";
+import SerialLayout, { Row } from "../../layouts/serial-layout";
+import Centered from "../../molecules/centered";
+import HttpLogsTable from "../http-logs-table";
+import { TAB_HEADER_HEIGHT } from "../../layouts/tab-layout";
 
 const HEADER_HEIGHT = 40;
 

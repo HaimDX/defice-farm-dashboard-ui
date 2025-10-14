@@ -1,14 +1,14 @@
 import React from "react";
 import styled from "styled-components";
-import SerialLayout, { Row } from "../layouts/serial-layout";
-import ParallelLayout, { Column } from "../layouts/parallel-layout";
-import Session from "../../../interfaces/session";
-import Icon, { Sizes } from "../atoms/icon";
-import Spinner from "../atoms/spinner";
-import CommonUtils from "../../../utils/common-utils";
-import Centered from "../molecules/centered";
+import SerialLayout, { Row } from "../../layouts/serial-layout";
+import ParallelLayout, { Column } from "../../layouts/parallel-layout";
+import Session from "../../../../interfaces/session";
+import Icon, { Sizes } from "../../atoms/icon";
+import Spinner from "../../atoms/spinner";
+import CommonUtils from "../../../../utils/common-utils";
+import Centered from "../../molecules/centered";
 import { useHistory } from "react-router-dom";
-import { getSessionDetailsUrl } from "../../../constants/routes";
+import { getSessionDetailsUrl } from "../../../../constants/routes";
 import chroma from "chroma-js";
 import { Tooltip } from "@mui/material";
 

@@ -1,41 +1,41 @@
 import React from "react";
 import styled from "styled-components";
-import EmptyMessage from "../molecules/empty-message";
-import SerialLayout, { Row } from "../layouts/serial-layout";
+import EmptyMessage from "../../molecules/empty-message";
+import SerialLayout, { Row } from "../../layouts/serial-layout";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getIsSessionsLoading,
   getSelectedSession,
   getSessions,
-} from "../../../store/selectors/entities/sessions-selector";
+} from "../../../../store/selectors/entities/sessions-selector";
 import { useCallback } from "react";
 import {
   fetchSessionByBuildId,
   fetchSessionInit,
   setSessionFilter
-} from "../../../store/actions/session-actions";
-import Session from "../../../interfaces/session";
+} from "../../../../store/actions/session-actions";
+import Session from "../../../../interfaces/session";
 import SessionCard from "./session-card";
 import { useEffect } from "react";
 import {
   APP_HEADER_HEIGHT,
   SUB_APP_HEADER_HEIGHT,
-} from "../../../constants/ui";
-import { getHeaderStyle } from "../../../utils/ui";
-import Dropdown from "../atoms/dropdown";
-import Icon, { Sizes } from "../atoms/icon";
+} from "../../../../constants/ui";
+import { getHeaderStyle } from "../../../../utils/ui";
+import Dropdown from "../../atoms/dropdown";
+import Icon, { Sizes } from "../../atoms/icon";
 import SessionListFilter from "./session-list-filter";
 import { useState } from "react";
 import { Badge } from "@material-ui/core";
-import { getSessionFilterCount } from "../../../store/selectors/ui/filter-selector";
-import Utils from "../../../utils/common-utils";
+import { getSessionFilterCount } from "../../../../store/selectors/ui/filter-selector";
+import Utils from "../../../../utils/common-utils";
 import {
   addPollingTask,
   removePollingTask,
-} from "../../../store/actions/polling-actions";
-import ParallelLayout, { Column } from "../layouts/parallel-layout";
-import Spinner from "../atoms/spinner";
-import { extractBuildIdFromUrl } from "../../../utils/utility";
+} from "../../../../store/actions/polling-actions";
+import ParallelLayout, { Column } from "../../layouts/parallel-layout";
+import Spinner from "../../atoms/spinner";
+import { extractBuildIdFromUrl } from "../../../../utils/utility";
 
 const Container = styled.div`
   border-right: 1px solid #ced8e1;

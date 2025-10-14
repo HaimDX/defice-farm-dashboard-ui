@@ -2,33 +2,50 @@ import React, { useCallback, useEffect } from "react";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import Session from "../../../interfaces/session";
+import Session from "../../../../interfaces/session";
 import {
   addPollingTask,
   removePollingTask,
-} from "../../../store/actions/polling-actions";
-import { fetchSessionDebugLogs } from "../../../store/actions/session-actions";
+} from "../../../../store/actions/polling-actions";
+import { fetchSessionDeviceLogs } from "../../../../store/actions/session-actions";
 import {
-  getDebugLogs,
-  getisDebugLogsLoading,
-} from "../../../store/selectors/entities/logs-selector";
-import { getHeaderStyle } from "../../../utils/ui";
-import CheckboxComponent from "../atoms/checkbox";
-import Input from "../atoms/input";
-import Spinner from "../atoms/spinner";
-import ParallelLayout, { Column } from "../layouts/parallel-layout";
-import SerialLayout, { Row } from "../layouts/serial-layout";
-import { TAB_HEADER_HEIGHT } from "../layouts/tab-layout";
-import Centered from "../molecules/centered";
-import EmptyMessage from "../molecules/empty-message";
-import SessionDebugLogEntry from "./session-debug-log-entry";
+  getDeviceLogs,
+  getisDeviceLogsLoading,
+} from "../../../../store/selectors/entities/logs-selector";
+import { getHeaderStyle } from "../../../../utils/ui";
+import CheckboxComponent from "../../atoms/checkbox";
+import Input from "../../atoms/input";
+import Spinner from "../../atoms/spinner";
+import ParallelLayout, { Column } from "../../layouts/parallel-layout";
+import SerialLayout, { Row } from "../../layouts/serial-layout";
+import { TAB_HEADER_HEIGHT } from "../../layouts/tab-layout";
+import Centered from "../../molecules/centered";
+
+const LogsEntry = styled.div`
+  padding: 3px 3px 3px 3px;
+  font-size: 13px;
+  line-height: 20px;
+  &:hover {
+    background: #32383f;
+  }
+`;
 
 function useLogs(filterText: string) {
-  const logs = useSelector(getDebugLogs);
+  const logs = useSelector(getDeviceLogs);
 
   return logs
     .filter((log: any) => log.message && log.message.indexOf(filterText) >= 0)
-    .map((log: any) => <SessionDebugLogEntry key={log} entry={log} />);
+    .map((log: any, index: number) => (
+      <LogsEntry key={index}>
+        {/* <ParallelLayout>
+          <Column grid={1}>
+            <LineNumber>{index + 1}</LineNumber>
+          </Column>
+          <Column grid={11}>{log.message}</Column>
+        </ParallelLayout> */}
+        {log.message}
+      </LogsEntry>
+    ));
 }
 
 const HEADER_HEIGHT = 50;
@@ -40,7 +57,13 @@ const Header = styled.div`
   padding: 10px;
 `;
 
-const Content = styled.div``;
+const Content = styled.div`
+  background: #24292e;
+  color: #cfd6dc;
+  padding: 10px;
+  word-break: break-word;
+  overflow: scroll;
+`;
 
 //TODO: Refactor this. temporary changes
 const StyledInput = styled(Input)`
@@ -64,16 +87,16 @@ type PropsType = {
   parentHeight: number;
 };
 
-export default function SessionDebugLogs(props: PropsType) {
+export default function SessionDeviceLogs(props: PropsType) {
   const { session, parentHeight } = props;
   const [filterText, setFilterText] = useState("");
   const logs = useLogs(filterText);
-  const isLoading = useSelector(getisDebugLogsLoading);
+  const isLoading = useSelector(getisDeviceLogsLoading);
   const dispatch = useDispatch();
   const [enablePolling, setEnablePolling] = useState(!session.is_completed);
 
   useEffect(() => {
-    dispatch(fetchSessionDebugLogs(session.session_id));
+    dispatch(fetchSessionDeviceLogs(session.session_id));
 
     if (session.is_completed) {
       togglePolling(false);
@@ -88,9 +111,9 @@ export default function SessionDebugLogs(props: PropsType) {
 
   const togglePolling = useCallback((on: boolean) => {
     if (on) {
-      dispatch(addPollingTask(fetchSessionDebugLogs(session.session_id)));
+      dispatch(addPollingTask(fetchSessionDeviceLogs(session.session_id)));
     } else {
-      dispatch(removePollingTask(fetchSessionDebugLogs(session.session_id)));
+      dispatch(removePollingTask(fetchSessionDeviceLogs(session.session_id)));
     }
     setEnablePolling(on);
   }, []);
@@ -136,15 +159,7 @@ export default function SessionDebugLogs(props: PropsType) {
             }px)`}
             scrollable
           >
-            <Content>
-              {logs.length ? (
-                logs
-              ) : (
-                <Centered>
-                  <EmptyMessage>No Logs available</EmptyMessage>
-                </Centered>
-              )}
-            </Content>
+            <Content>{logs}</Content>
           </Row>
         </SerialLayout>
       </Container>

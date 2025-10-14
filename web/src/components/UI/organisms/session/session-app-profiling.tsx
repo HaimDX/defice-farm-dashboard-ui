@@ -1,15 +1,15 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import Session from "../../../interfaces/session";
-import { fetchSessionProfilingData } from "../../../store/actions/session-actions";
+import Session from "../../../../interfaces/session";
+import { fetchSessionProfilingData } from "../../../../store/actions/session-actions";
 import {
   getisProfilingLoading,
   getProfilingdata,
-} from "../../../store/selectors/entities/logs-selector";
-import Spinner from "../atoms/spinner";
-import SerialLayout, { Row } from "../layouts/serial-layout";
-import Centered from "../molecules/centered";
+} from "../../../../store/selectors/entities/logs-selector";
+import Spinner from "../../atoms/spinner";
+import SerialLayout, { Row } from "../../layouts/serial-layout";
+import Centered from "../../molecules/centered";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -22,8 +22,8 @@ import {
   Filler,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import CommonUtils from "../../../utils/common-utils";
-import { getSelectedTheme } from "../../../store/selectors/ui/theme-selector";
+import CommonUtils from "../../../../utils/common-utils";
+import { getSelectedTheme } from "../../../../store/selectors/ui/theme-selector";
 import _ from "lodash";
 
 ChartJS.register(

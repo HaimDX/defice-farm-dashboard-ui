@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from "react";
-import Session from "../../../interfaces/session";
-import CommonUtils from "../../../utils/common-utils";
-import VideoPlayer from "../atoms/video-player";
+import Session from "../../../../interfaces/session";
+import CommonUtils from "../../../../utils/common-utils";
+import VideoPlayer from "../../atoms/video-player";
 import styled from "styled-components";
-import EmptyMessage from "../molecules/empty-message";
-import Spinner from "../atoms/spinner";
-import Icon, { Sizes } from "../atoms/icon";
+import EmptyMessage from "../../molecules/empty-message";
+import Spinner from "../../atoms/spinner";
+import Icon, { Sizes } from "../../atoms/icon";
 
 const Container = styled.div<{ height: string }>`
   height: ${(props) => props.height};
