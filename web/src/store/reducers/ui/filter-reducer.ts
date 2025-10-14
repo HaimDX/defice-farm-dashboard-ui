@@ -3,11 +3,9 @@ import createReducer from "../../../utils/createReducer";
 import ReduxActionTypes from "../../redux-action-types";
 
 export type SessionFilterType = {
-  name: string;
-  os: Array<string>;
+  deviceName : string;
   status: Array<string>;
   device_udid: string;
-  user: Array<string>;
 };
 
 export type BuildFilterType = {
@@ -23,11 +21,9 @@ export type FilterState = {
 
 const initialState: FilterState = {
   session: {
-    name: "",
-    os: [],
     status: [],
     device_udid: "",
-    user: [],
+    deviceName: "",
   },
   build : {
     user : "",

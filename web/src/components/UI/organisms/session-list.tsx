@@ -177,6 +177,7 @@ export default function SessionList() {
                   </FilterTrigger>
                   <FilterDropdown>
                     <SessionListFilter
+                      platform={sessions[0]?.platform_name?.toLowerCase() || undefined}
                       onApply={(payload) => {
                         setFilter(payload);
                         setIsFilterOpen(false);

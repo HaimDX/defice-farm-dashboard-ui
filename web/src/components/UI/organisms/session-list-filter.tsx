@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useCallback } from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { PLATFORM, STATUS } from "../../../constants/session";
+import { DEVICE_FILTERS, PLATFORM, STATUS } from "../../../constants/session";
 import { getSessionFilters } from "../../../store/selectors/ui/filter-selector";
 import Button from "../atoms/button";
 import Input from "../atoms/input";
@@ -29,46 +29,47 @@ const StyledButton = styled(Button)`
   }
 `;
 
-const TEMP_USERS = ["ANA", "GHH", "DEF"];
-
 type Propstype = {
+  platform: "ios" | "android" | undefined;
   onApply: (payload: any) => void;
 };
 
 export default function SessionListFilter(props: Propstype) {
-  const { onApply } = props;
+  const { onApply,platform } = props;
   const filterState = useSelector(getSessionFilters);
-  const [name, setName] = useState(filterState.name);
-  const [os, setOs] = useState(filterState.os);
   const [status, setStatus] = useState(filterState.status);
   const [device_udid, setUuid] = useState(filterState.device_udid);
-  const [user, setUser] = useState(filterState.user);
   const [showClearButton, setShowClearButton] = useState(false);
+  const [deviceName, setDeviceName] = useState(filterState.deviceName)
+
+  // Memoize available devices based on the platform of the selected build
+  const deviceNames = useMemo(() => {
+    if (platform && DEVICE_FILTERS[platform]) {
+      return Object.keys(DEVICE_FILTERS[platform]);
+    }
+    return [];
+  }, [platform]);
 
   const apply = useCallback(() => {
     onApply({
-      name,
-      os,
       status: status,
       device_udid,
-      user,
+      deviceName,
     });
-  }, [name, os, status, device_udid, user]);
+  }, [status, device_udid,deviceName]);
 
   const reset = useCallback(() => {
     onApply({
-      name: "",
-      os: [],
       status: [],
       device_udid: "",
-      user: [],
+      deviceName : ""
     });
-  }, [name, os, status, device_udid, user]);
+  }, [ status, device_udid,deviceName]);
 
   useEffect(() => {
     setShowClearButton(
-      [name, os, status, device_udid, user].some((val) => !!val));
-  }, [name, os, status, device_udid, user]);
+      [ status, device_udid, deviceName].some((val) => !!val));
+  }, [status, device_udid, deviceName]);
 
   return (
     <Container>
@@ -91,6 +92,40 @@ export default function SessionListFilter(props: Propstype) {
             </Column>
           </ParallelLayout>
         </Row>
+
+        {/* Device Filter */}
+        {platform && deviceNames.length > 0 ? (
+          <Row padding="10px 0px">
+            <ParallelLayout>
+              <Column grid={6}>
+                <Label>Device:</Label>
+              </Column>
+              <Column grid={6}>
+                <Control>
+                  <Select
+                    options={deviceNames}
+                    onChange={(value) => {
+                      const selectedDeviceUDID =
+                        DEVICE_FILTERS[platform][value];
+                      setDeviceName(value);
+                      setUuid(selectedDeviceUDID); // Update device UDID when a device is selected
+                    }}
+                    selected={deviceName}
+                  />
+                </Control>
+              </Column>
+            </ParallelLayout>
+          </Row>
+        ) : platform === undefined ? (
+          <Row padding="10px 0px">
+            <Label>Select a build first</Label>
+          </Row>
+        ) : (
+          <Row padding="10px 0px">
+            <Label>No devices available for this platform</Label>
+          </Row>
+        )}
+
         <Row padding="10px 0px">
           <ParallelLayout>
             <Column grid={6}>
@@ -107,24 +142,6 @@ export default function SessionListFilter(props: Propstype) {
           </ParallelLayout>
         </Row>
 
-        {/* Tractive Custom column  USER  */}
-        <Row padding="10px 0px">
-          <ParallelLayout>
-            <Column grid={6}>
-              <Label>User:</Label>
-            </Column>
-            <Column grid={6}>
-              <Control>
-                <Select
-                  multiple={false}
-                  options={TEMP_USERS}
-                  onChange={(value) => setUser(value)}
-                  selected={status}
-                />
-              </Control>
-            </Column>
-          </ParallelLayout>
-        </Row>
 
         <Row align="center" padding="20px 0px 0px">
           <ParallelLayout>

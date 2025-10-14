@@ -46,7 +46,7 @@ function* fetchAllSessionsByBuild(action: ReduxActionType<any>) {
   let filters: Record<string, any> = {};
   let buildId: string | undefined;
 
-  // ✅ Support both: string payload OR object payload
+  //Support both: string payload OR object payload
   if (typeof payload === "string") {
     buildId = payload;
   } else if (typeof payload === "object") {
@@ -55,13 +55,13 @@ function* fetchAllSessionsByBuild(action: ReduxActionType<any>) {
     filters = rest;
   }
 
-  // 🚨 If no build id is provided, do nothing
+  //If no build id is provided, do nothing
   if (!buildId) {
     console.warn("[fetchAllSessionsByBuild] Missing build_id, skipping fetch");
     return;
   }
 
-  // 🛰️ Fetch sessions scoped to the build
+  //Fetch sessions scoped to the build
   const sessions: ApiResponse<PaginatedResponse<Session>> = yield SessionApi.getSessionsByBuild(
     buildId,
     filters
