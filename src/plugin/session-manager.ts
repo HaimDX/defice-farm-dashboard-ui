@@ -457,11 +457,48 @@ class SessionManager {
     }
   }
 
+  // private async executeCommand(command: AppiumCommand) {
+  //   let scriptName = command.args[0].split(":")[1].trim();
+  //   pluginLogger.info(`Executing ${scriptName} command for session ${this.sessionInfo.session_id}`);
+  //   await (this.dashboardCommands[scriptName as keyof DashboardCommands] as any)(command.args[1]);
+  // }
+
   private async executeCommand(command: AppiumCommand) {
-    let scriptName = command.args[0].split(":")[1].trim();
-    pluginLogger.info(`Executing ${scriptName} command for session ${this.sessionInfo.session_id}`);
-    await (this.dashboardCommands[scriptName as keyof DashboardCommands] as any)(command.args[1]);
+    const scriptName = command.args[0].split(":")[1].trim();
+    const fn = this.dashboardCommands[scriptName as keyof DashboardCommands];
+
+    // Pre-execution logging
+    logger.info(
+      `[dashboard-plugin] Attempting to execute dashboard command '${scriptName}' for session ${this.sessionInfo.session_id}`
+    );
+
+    if (typeof fn === "function") {
+      logger.info(
+        `[dashboard-plugin] Found function '${scriptName}' on DashboardCommands. Executing now...`
+      );
+      try {
+        await fn.call(this.dashboardCommands, command.args[1]);
+        logger.info(
+          `[dashboard-plugin] ✅ Successfully executed dashboard command '${scriptName}' for session ${this.sessionInfo.session_id}`
+        );
+      } catch (err: any) {
+        logger.error(
+          `[dashboard-plugin] ❌ Error while executing dashboard command '${scriptName}' for session ${this.sessionInfo.session_id}: ${err.message}`
+        );
+        logger.error(err.stack);
+      }
+    } else {
+      logger.warn(
+        `[dashboard-plugin] ⚠️ Dashboard command '${scriptName}' not found or not a function on DashboardCommands. Type was: ${typeof fn}`
+      );
+      logger.warn(
+        `[dashboard-plugin] Available keys on DashboardCommands: ${Object.keys(
+          this.dashboardCommands
+        ).join(", ")}`
+      );
+    }
   }
+
 
   private async onSessionTimeOut(timeoutValue: number) {
     logger.warn(`Session ${this.sessionInfo.session_id} timed out after ${timeoutValue} seconds`);
