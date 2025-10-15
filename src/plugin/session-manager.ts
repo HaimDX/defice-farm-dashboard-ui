@@ -142,6 +142,7 @@ class SessionManager {
       this.sessionTimeoutTracker.stop();
       await this.sessionTerminated();
     } else if (command.commandName == "execute" && isDashboardCommand(this.dashboardCommands, command.args[0])) {
+      pluginLogger.info(`Command ${command.args[0]} can be handled by Tractive dashboard for session ${this.sessionInfo.session_id}`);
       await this.executeCommand(command);
       return true;
     } else if (command.commandName == "proxyReqRes") {
@@ -458,7 +459,7 @@ class SessionManager {
 
   private async executeCommand(command: AppiumCommand) {
     let scriptName = command.args[0].split(":")[1].trim();
-    logger.info(`Executing ${scriptName} command for session ${this.sessionInfo.session_id}`);
+    pluginLogger.info(`Executing ${scriptName} command for session ${this.sessionInfo.session_id}`);
     await (this.dashboardCommands[scriptName as keyof DashboardCommands] as any)(command.args[1]);
   }
 
