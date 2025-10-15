@@ -1,6 +1,7 @@
 import { Session, Logs } from "../models/index";
 import { SessionInfo } from "../interfaces/session-info";
 import { logger } from "../loggers/logger";
+import { pluginLogger } from "../loggers/plugin-logger";
 export class DashboardCommands {
   constructor(private sessionInfo: SessionInfo) {
     (this as any).updateStatus = this.updateStatus.bind(this);
@@ -40,7 +41,7 @@ export class DashboardCommands {
    * commandName: dashboard: updateStatus
    */
   public async updateStatus(args: any[]): Promise<void> {
-    logger.info(`Updating test status for session ${this.sessionInfo.session_id}`);
+    pluginLogger.info(`Updating test status for session ${this.sessionInfo.session_id}`);
     let props: any = args[0];
     if (!props.status || !new RegExp(/passed|failed/g).test(props.status.toLowerCase())) {
       return;
