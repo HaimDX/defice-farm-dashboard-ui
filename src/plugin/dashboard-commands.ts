@@ -7,7 +7,7 @@ export class DashboardCommands {
   /**
    * commandName: dashboard: setTestName
    */
-  private async setTestName(args: any[]): Promise<void> {
+  public async setTestName(args: any[]): Promise<void> {
     logger.info(`Updating test name for session ${args[0]}`);
     await Session.update(
       {
@@ -22,7 +22,7 @@ export class DashboardCommands {
   /**
    * commandName: dashboard: debug
    */
-  private async debug(args: any[]): Promise<void> {
+  public async debug(args: any[]): Promise<void> {
     logger.info(`Adding debug logs for session ${this.sessionInfo.session_id}`);
     let props: any = args[0];
     await Logs.create({
@@ -37,7 +37,7 @@ export class DashboardCommands {
   /**
    * commandName: dashboard: updateStatus
    */
-  private async updateStatus(args: any[]): Promise<void> {
+  public async updateStatus(args: any[]): Promise<void> {
     logger.info(`Updating test status for session ${this.sessionInfo.session_id}`);
     let props: any = args[0];
     if (!props.status || !new RegExp(/passed|failed/g).test(props.status.toLowerCase())) {
