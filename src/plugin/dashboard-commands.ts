@@ -2,7 +2,9 @@ import { Session, Logs } from "../models/index";
 import { SessionInfo } from "../interfaces/session-info";
 import { logger } from "../loggers/logger";
 export class DashboardCommands {
-  constructor(private sessionInfo: SessionInfo) {}
+  constructor(private sessionInfo: SessionInfo) {
+    (this as any).updateStatus = this.updateStatus.bind(this);
+  }
 
   /**
    * commandName: dashboard: setTestName

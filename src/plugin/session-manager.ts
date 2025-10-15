@@ -458,6 +458,7 @@ class SessionManager {
 
   private async executeCommand(command: AppiumCommand) {
     let scriptName = command.args[0].split(":")[1].trim();
+    logger.info(`Executing ${scriptName} command for session ${this.sessionInfo.session_id}`);
     await (this.dashboardCommands[scriptName as keyof DashboardCommands] as any)(command.args[1]);
   }
 
