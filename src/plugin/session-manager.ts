@@ -468,30 +468,30 @@ class SessionManager {
     const fn = this.dashboardCommands[scriptName as keyof DashboardCommands];
 
     // Pre-execution logging
-    logger.info(
+    pluginLogger.info(
       `[dashboard-plugin] Attempting to execute dashboard command '${scriptName}' for session ${this.sessionInfo.session_id}`
     );
 
     if (typeof fn === "function") {
-      logger.info(
+      pluginLogger.info(
         `[dashboard-plugin] Found function '${scriptName}' on DashboardCommands. Executing now...`
       );
       try {
         await fn.call(this.dashboardCommands, command.args[1]);
-        logger.info(
+        pluginLogger.info(
           `[dashboard-plugin] ✅ Successfully executed dashboard command '${scriptName}' for session ${this.sessionInfo.session_id}`
         );
       } catch (err: any) {
-        logger.error(
+        pluginLogger.error(
           `[dashboard-plugin] ❌ Error while executing dashboard command '${scriptName}' for session ${this.sessionInfo.session_id}: ${err.message}`
         );
-        logger.error(err.stack);
+        pluginLogger.error(err.stack);
       }
     } else {
-      logger.warn(
+      pluginLogger.warn(
         `[dashboard-plugin] ⚠️ Dashboard command '${scriptName}' not found or not a function on DashboardCommands. Type was: ${typeof fn}`
       );
-      logger.warn(
+      pluginLogger.warn(
         `[dashboard-plugin] Available keys on DashboardCommands: ${Object.keys(
           this.dashboardCommands
         ).join(", ")}`
