@@ -118,6 +118,8 @@ function millisToMinutesAndSeconds(millis: any) {
 function isDashboardCommand(dashboardCommand: DashboardCommands, commandName: string) {
   let parts = commandName.split(":").map((p) => p.trim());
   pluginLogger.info(`Trying to determine if command is part of the tractive dashboard plugin commands. Command name: ${commandName}`);
+  pluginLogger.info(`Command parts: ${parts}`);
+  pluginLogger.info("The condition truthfullness is : " + parts[0] == "dashboard" && typeof dashboardCommand[parts[1] as keyof DashboardCommands] == "function")
   return parts[0] == "dashboard" && typeof dashboardCommand[parts[1] as keyof DashboardCommands] == "function";
 }
 
