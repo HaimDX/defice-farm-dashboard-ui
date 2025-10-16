@@ -43,26 +43,26 @@ export class DashboardCommands {
   public async updateStatus(args: any[]): Promise<void> {
     pluginLogger.info(`Updating test status for session ${this.sessionInfo.session_id}`);
 
-    // Handle both array shapes: [[{...}]] and [{...}]
-    const propsArray = Array.isArray(args[0]) ? args[0][0] : args[0];
-    const props = propsArray || {};
-
+    const props: any = Array.isArray(args[0]) ? args[0][0] : args[0];
     pluginLogger.info(
       `Updating status for session ${this.sessionInfo.session_id} with status ${props.status} and message ${props.message}`
     );
 
-    if (!props.status || !/(passed|failed)/i.test(props.status)) {
+    if (!props.status || !/(passed|failed|retried)/i.test(props.status)) {
       pluginLogger.info(
-        `Not updating status for session ${this.sessionInfo.session_id} as status is not passed or failed`
+        `Not updating status for session ${this.sessionInfo.session_id} as status '${props.status}' is unsupported`
       );
       return;
     }
 
+    let normalizedStatus = props.status.toUpperCase();
+    let isPassed = props.status.toLowerCase() === "passed";
+
     await Session.update(
       {
         session_status_message: props.message,
-        session_status: props.status.toUpperCase(),
-        is_test_passed: props.status.toLowerCase() === "passed",
+        session_status: normalizedStatus,
+        is_test_passed: isPassed,
       },
       {
         where: { session_id: this.sessionInfo.session_id },
@@ -70,7 +70,8 @@ export class DashboardCommands {
     );
 
     pluginLogger.info(
-      `✅ Updated session ${this.sessionInfo.session_id} in database with status ${props.status.toUpperCase()}`
+      `✅ Updated session ${this.sessionInfo.session_id} in DB with status ${normalizedStatus}`
     );
   }
+
 }
