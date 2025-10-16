@@ -44,6 +44,7 @@ export class DashboardCommands {
     pluginLogger.info(`Updating test status for session ${this.sessionInfo.session_id}`);
     let props: any = args[0];
     if (!props.status || !new RegExp(/passed|failed/g).test(props.status.toLowerCase())) {
+      pluginLogger.info(`Not updating status for session ${this.sessionInfo.session_id} as status is not passed or failed`);
       return;
     }
     await Session.update(
