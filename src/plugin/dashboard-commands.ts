@@ -43,6 +43,7 @@ export class DashboardCommands {
   public async updateStatus(args: any[]): Promise<void> {
     pluginLogger.info(`Updating test status for session ${this.sessionInfo.session_id}`);
     let props: any = args[0];
+    pluginLogger.info(`Updating status for session ${this.sessionInfo.session_id} with status ${props.status}`);
     if (!props.status || !new RegExp(/passed|failed/g).test(props.status.toLowerCase())) {
       pluginLogger.info(`Not updating status for session ${this.sessionInfo.session_id} as status is not passed or failed`);
       return;
