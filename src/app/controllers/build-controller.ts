@@ -11,6 +11,9 @@ export class BuildController extends BaseController {
   public initializeRoutes(router: Router, config: any) {
     router.get("/", this.getBuilds.bind(this));
     router.get("/:build_id/sessions", this.getSessionsForBuild.bind(this));
+
+    //New route for fetching a single build by name
+    router.get("/by-name", this.getBuildByName.bind(this));
   }
 
   public async getBuilds(request: Request, response: Response, next: NextFunction) {
@@ -89,5 +92,44 @@ export class BuildController extends BaseController {
         order: [["start_time", "DESC"]],
       })
     );
+  }
+
+  public async getBuildByName(request: Request, response: Response, next: NextFunction) {
+    try {
+      const { name } = request.query as any;
+
+      if (!name) {
+        return this.sendFailureResponse(response, "Missing required parameter: name", 400);
+      }
+
+      const filter: any = { name: { [Op.eq]: name.trim() } };
+
+      const build = await Build.findOne({
+        where: { name: { [Op.eq]: name.trim() } },
+        include: [
+          { model: Project, as: "project" },
+          { model: Session, as: "sessions" },
+        ],
+        order: [["updated_at", "DESC"]],
+      });
+
+      if (!build) {
+        return this.sendFailureResponse(response, "Build not found", 404);
+      }
+
+      const data = {
+        build_id: build.build_id,
+        build_name: build.name,
+        user: build.user,
+        project_name: build.project ? build.project.name : null,
+        platform_name: build.platform_name,
+        session_count: build.sessions?.length || 0,
+        created_at: build.createdAt,
+      };
+
+      this.sendSuccessResponse(response, data);
+    } catch (error) {
+      next(error);
+    }
   }
 }
