@@ -33,39 +33,34 @@ function* fetchSessions(action?: ReduxActionType<Record<string, string>>) {
 
 function* fetchAllSessionsByBuild(action: ReduxActionType<any>) {
   if (!action || !action.payload) {
+    console.warn("[fetchAllSessionsByBuild] Missing payload, skipping fetch");
     return;
   }
 
   const payload = action.payload;
 
-  if (!payload || !payload.buildId) {
-    console.warn("[fetchAllSessionsByBuild] Missing buildId, skipping fetch");
-    return;
-  }
-
   let filters: Record<string, any> = {};
   let buildId: string | undefined;
 
-  //Support both: string payload OR object payload
+  //Handle both string and object payloads
   if (typeof payload === "string") {
-    buildId = payload;
+    buildId = payload; // direct buildId
   } else if (typeof payload === "object") {
     const { build_id, buildId: providedBuildId, ...rest } = payload;
-    buildId = providedBuildId;
+    buildId = providedBuildId || build_id;
     filters = rest;
   }
 
-  //If no build id is provided, do nothing
+  //Now check for buildId
   if (!buildId) {
-    console.warn("[fetchAllSessionsByBuild] Missing build_id, skipping fetch");
+    console.warn("[fetchAllSessionsByBuild] Missing buildId, skipping fetch");
+    console.log("payload:", payload);
     return;
   }
 
-  //Fetch sessions scoped to the build
-  const sessions: ApiResponse<PaginatedResponse<Session>> = yield SessionApi.getSessionsByBuild(
-    buildId,
-    filters
-  );
+  //Fetch sessions scoped to that build
+  const sessions: ApiResponse<PaginatedResponse<Session>> =
+    yield SessionApi.getSessionsByBuild(buildId, filters);
 
   if (sessions && sessions.success) {
     yield put(
@@ -76,6 +71,7 @@ function* fetchAllSessionsByBuild(action: ReduxActionType<any>) {
     );
   }
 }
+
 
 function* fetchSession(action: ReduxActionType<string>) {
   if (action.payload) {

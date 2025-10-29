@@ -1,7 +1,11 @@
 import React from "react";
 import { useEffect } from "react";
 import { connect, useDispatch } from "react-redux";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
 import styled, { ThemeProvider } from "styled-components";
 import Dashboard from "./components/pages/dashboard";
 import PageNotFound from "./components/pages/page-not-found";

@@ -18,3 +18,5 @@ export type AppState = {
   entities: EntitiesState;
   ui: UIState;
 };
+
+export type RootState = ReturnType<typeof rootReducer>;

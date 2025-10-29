@@ -13,7 +13,10 @@ import {
   getSessionDetailsUrl
 } from "../../constants/routes";
 import { APP_HEADER_HEIGHT } from "../../constants/ui";
-import { setSelectedSession } from "../../store/actions/session-actions";
+import {
+  fetchSessionInit,
+  setSelectedSession
+} from "../../store/actions/session-actions";
 import { getSessions } from "../../store/selectors/entities/sessions-selector";
 import ParallelLayout, { Column } from "../UI/layouts/parallel-layout";
 import SerialLayout, { Row } from "../UI/layouts/serial-layout";
@@ -24,6 +27,8 @@ import BuildList from "../UI/organisms/build/build-list";
 import { getBuilds } from "../../store/selectors/entities/builds-selector";
 import { setSelectedBuild } from "../../store/actions/build-actions";
 import { extractBuildIdFromUrl } from "../../utils/utility";
+import { RootState } from "../../store";
+import Session from "../../interfaces/session";
 
 function extractSessionidFromUrl(url: string): string | null {
   const matches = url.match(new RegExp(/dashboard\/session\/(.*)/));
@@ -41,17 +46,42 @@ export default function DashboardTemplate() {
   const buildIdFromUrl = extractBuildIdFromUrl(location.pathname);
 
   useEffect(() => {
-    const SelectedSession = !!session_id
-      ? sessions.find((d) => d.session_id === session_id) || sessions[0]
-      : sessions[0];
+    if (!session_id) return;
 
-    if (SelectedSession) {
-      if (session_id && session_id != SelectedSession.session_id) {
-        history.push(getSessionDetailsUrl(SelectedSession.session_id));
-      }
-      dispatch(setSelectedSession(SelectedSession));
+    const matchedSession = sessions.find((s) => s.session_id === session_id);
+
+    if (matchedSession) {
+      dispatch(setSelectedSession(matchedSession));
+    } else {
+      // Session isn't loaded yet — fetch it by ID
+      dispatch(fetchSessionInit(session_id));
     }
   }, [session_id, sessions]);
+
+  //session now exists
+  const selectedSession = useSelector((state:RootState) =>
+    state.entities.sessions.items.find((s:Session) => s.session_id === session_id)
+  );
+
+  useEffect(() => {
+    if (selectedSession) {
+      dispatch(setSelectedSession(selectedSession));
+
+      if (selectedSession.build_id) {
+        const matchingBuild = builds.find(
+          (b) => b.build_id === selectedSession.build_id
+        );
+
+        if (matchingBuild) {
+          dispatch(setSelectedBuild(matchingBuild));
+        } else {
+          // Optional: trigger fetch build by ID if needed
+          // dispatch(fetchBuildInit(selectedSession.build_id));
+        }
+      }
+    }
+  }, [selectedSession, builds]);
+
 
   useEffect(() => {
     // Only update builds selection if we are on a build page
@@ -61,14 +91,21 @@ export default function DashboardTemplate() {
         : builds[0];
 
       if (selectedBuild) {
-        if (buildIdFromUrl && buildIdFromUrl != selectedBuild.build_id) {
-          history.push(getBuildDetailsUrl(selectedBuild.build_id));
+        const sessionsUrl = getBuildDetailsUrl(selectedBuild.build_id);
+
+        if (
+          buildIdFromUrl &&
+          (buildIdFromUrl !== selectedBuild.build_id ||
+            !location.pathname.includes("/sessions"))
+        ) {
+          // Always redirect to /builds/:id/sessions explicitly
+          history.push(sessionsUrl);
         }
+
         dispatch(setSelectedBuild(selectedBuild));
       }
     }
-
-  }, [buildIdFromUrl, builds]);
+  }, [buildIdFromUrl, builds, location.pathname]);
 
   return (
     <SerialLayout>

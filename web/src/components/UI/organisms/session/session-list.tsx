@@ -1,70 +1,62 @@
-import React from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
-import EmptyMessage from "../../molecules/empty-message";
-import SerialLayout, { Row } from "../../layouts/serial-layout";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getIsSessionsLoading,
   getSelectedSession,
   getSessions,
 } from "../../../../store/selectors/entities/sessions-selector";
-import { useCallback } from "react";
 import {
   fetchSessionByBuildId,
-  fetchSessionInit,
-  setSessionFilter
+  setSessionFilter,
 } from "../../../../store/actions/session-actions";
-import Session from "../../../../interfaces/session";
 import SessionCard from "./session-card";
-import { useEffect } from "react";
+import SessionListFilter from "./session-list-filter";
+import Spinner from "../../atoms/spinner";
+import Icon, { Sizes } from "../../atoms/icon";
+import EmptyMessage from "../../molecules/empty-message";
+import Dropdown from "../../atoms/dropdown";
+import SerialLayout, { Row } from "../../layouts/serial-layout";
+import ParallelLayout, { Column } from "../../layouts/parallel-layout";
+import { extractBuildIdFromUrl } from "../../../../utils/utility";
+import { getHeaderStyle } from "../../../../utils/ui";
+import { Badge } from "@material-ui/core";
+import { getSessionFilterCount } from "../../../../store/selectors/ui/filter-selector";
 import {
   APP_HEADER_HEIGHT,
   SUB_APP_HEADER_HEIGHT,
 } from "../../../../constants/ui";
-import { getHeaderStyle } from "../../../../utils/ui";
-import Dropdown from "../../atoms/dropdown";
-import Icon, { Sizes } from "../../atoms/icon";
-import SessionListFilter from "./session-list-filter";
-import { useState } from "react";
-import { Badge } from "@material-ui/core";
-import { getSessionFilterCount } from "../../../../store/selectors/ui/filter-selector";
 import Utils from "../../../../utils/common-utils";
-import {
-  addPollingTask,
-  removePollingTask,
-} from "../../../../store/actions/polling-actions";
-import ParallelLayout, { Column } from "../../layouts/parallel-layout";
-import Spinner from "../../atoms/spinner";
-import { extractBuildIdFromUrl } from "../../../../utils/utility";
+import Session from "../../../../interfaces/session";
 
 const Container = styled.div`
-  border-right: 1px solid #ced8e1;
-  width: 100%;
+    border-right: 1px solid #ced8e1;
+    width: 100%;
 `;
 
 const List = styled.div``;
 
 const Header = styled.div`
-  ${(props) => getHeaderStyle(props.theme)};
-  padding: 7px 5px;
+    ${(props) => getHeaderStyle(props.theme)};
+    padding: 7px 5px;
 `;
 
 const FilterTrigger = styled.div`
-  padding: 10px;
+    padding: 10px;
 `;
 
 const FilterTriggerLabel = styled.div`
-  display: inline-block;
-  font-size: 13px;
-  padding-left: 4px;
+    display: inline-block;
+    font-size: 13px;
+    padding-left: 4px;
 `;
 
 const FilterDropdown = styled.div``;
 
 const StyledBadge = styled(Badge)`
-  positive: relative;
-  left: 17px;
-  top: -2px;
+    position: relative;
+    left: 17px;
+    top: -2px;
 `;
 
 function getFiltersFromQueryParams(searchQuery: string) {
@@ -92,70 +84,68 @@ function getFiltersFromQueryParams(searchQuery: string) {
   );
 }
 
-
 export default function SessionList() {
-
-  const sessions = useSelector(getSessions);
   const dispatch = useDispatch();
+  const sessions = useSelector(getSessions);
   const isLoading = useSelector(getIsSessionsLoading);
-  const SelectedSession = useSelector(getSelectedSession);
+  const selectedSession = useSelector(getSelectedSession);
   const urlFilters = getFiltersFromQueryParams(window.location.search);
-  const buildId = extractBuildIdFromUrl(location.pathname);
-
-  useEffect(() => {
-    if (Object.keys(urlFilters).length) {
-      // apply filters scoped to the selected build
-      setFilter(urlFilters);
-    } else {
-      // fetch sessions for the selected build only
-      dispatch(fetchSessionByBuildId({ buildId }));
-      //dispatch(fetchSessionByBuildId(buildId));
-    }
-  }, [buildId]);
-
-  // useEffect(() => {
-  //   dispatch(addPollingTask(fetchSessionInit()));
-  //
-  //   return () => {
-  //     dispatch(removePollingTask(fetchSessionInit()));
-  //   };
-  // }, []);
-
-  const setFilter = useCallback((payload) => {
-    // always merge current buildId into the payload
-    const finalPayload = {
-      ...payload,
-      buildId,
-    };
-
-    dispatch(setSessionFilter(finalPayload));
-
-    // fetch sessions for the build with the filters applied (one-time fetch)
-    dispatch(fetchSessionByBuildId(finalPayload));
-  }, [buildId, dispatch]);
-
-  // const setFilter = useCallback((payload) => {
-  //   // Always include build_id in the filter when a build is selected
-  //   const finalPayload = {
-  //     ...payload,
-  //     build_id: buildId || undefined,
-  //   };
-  //
-  //   dispatch(setSessionFilter(finalPayload));
-  //
-  //   /* Reset session polling with newly applied filters */
-  //   dispatch(removePollingTask(fetchSessionInit()));
-  //   dispatch(addPollingTask(fetchSessionInit(finalPayload)));
-  // }, []);
-
-  useEffect(() => {
-    if (!SelectedSession) {
-      dispatch(fetchSessionByBuildId(buildId));
-    }
-  }, [SelectedSession,buildId,dispatch]);
 
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const filterCount = useSelector(getSessionFilterCount);
+  const [effectiveBuildId, setEffectiveBuildId] = useState<string | undefined>();
+
+  const rawBuildId = extractBuildIdFromUrl(location.pathname);
+
+  const stableUrlFilters = useMemo(() => {
+    return getFiltersFromQueryParams(window.location.search);
+  }, [window.location.search]);
+
+  // 1. Set buildId from URL if available
+  useEffect(() => {
+    if (rawBuildId) {
+      setEffectiveBuildId(rawBuildId);
+    }
+  }, [rawBuildId]);
+
+  // 2. Fallback to the selected session's buildId if on a session URL
+  useEffect(() => {
+    if (!rawBuildId && selectedSession?.build_id) {
+      setEffectiveBuildId(selectedSession.build_id);
+    }
+  }, [rawBuildId, selectedSession]);
+
+
+  // 3. Fetch sessions once effectiveBuildId is known
+  useEffect(() => {
+    if (!effectiveBuildId) return;
+
+    if (Object.keys(stableUrlFilters).length > 0) {
+      dispatch(fetchSessionByBuildId({ buildId: effectiveBuildId, ...stableUrlFilters }));
+      dispatch(setSessionFilter({ buildId: effectiveBuildId, ...stableUrlFilters }));
+    } else {
+      dispatch(fetchSessionByBuildId(effectiveBuildId));
+    }
+  }, [effectiveBuildId, stableUrlFilters, dispatch]);
+
+  // 4. When filters are applied from UI
+  const setFilter = useCallback((payload) => {
+    if (!effectiveBuildId) return;
+
+    const finalPayload = {
+      ...payload,
+      buildId: effectiveBuildId,
+    };
+
+    console.log("fetching sessions from 4", effectiveBuildId);
+    dispatch(setSessionFilter(finalPayload));
+    dispatch(fetchSessionByBuildId(finalPayload));
+  }, [effectiveBuildId, dispatch]);
+
+  // 5. Manually filter only sessions for the current build
+  const filteredSessions = sessions.filter(
+    (session: Session) => session.build_id === effectiveBuildId,
+  );
 
   return (
     <Container>
@@ -177,7 +167,7 @@ export default function SessionList() {
                   </FilterTrigger>
                   <FilterDropdown>
                     <SessionListFilter
-                      platform={sessions[0]?.platform_name?.toLowerCase() || undefined}
+                      platform={filteredSessions[0]?.platform_name?.toLowerCase()}
                       onApply={(payload) => {
                         setFilter(payload);
                         setIsFilterOpen(false);
@@ -195,24 +185,18 @@ export default function SessionList() {
           </Header>
         </Row>
         <Row
-          height={`calc(100vh - ${
-            SUB_APP_HEADER_HEIGHT + APP_HEADER_HEIGHT
-          }px)`}
+          height={`calc(100vh - ${SUB_APP_HEADER_HEIGHT + APP_HEADER_HEIGHT}px)`}
           scrollable
         >
           <List>
-            {sessions && sessions.length > 0 ? (
-              <>
-                {sessions.map((session: Session) => (
-                  <SessionCard
-                    key={session.session_id}
-                    selected={
-                      SelectedSession?.session_id === session.session_id
-                    }
-                    session={session}
-                  />
-                ))}
-              </>
+            {filteredSessions.length > 0 ? (
+              filteredSessions.map((session: Session) => (
+                <SessionCard
+                  key={session.session_id}
+                  selected={selectedSession?.session_id === session.session_id}
+                  session={session}
+                />
+              ))
             ) : (
               <EmptyMessage>No sessions found for given filter.</EmptyMessage>
             )}
