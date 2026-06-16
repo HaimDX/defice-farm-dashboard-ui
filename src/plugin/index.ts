@@ -10,6 +10,7 @@ import * as express from "express";
 import { registerDebugMiddlware } from "./debugger";
 import _ from "lodash";
 import getPort from "get-port";
+import { bootstrapAdmin } from "../auth/bootstrap-admin";
 
 const sessionMap: Map<string, SessionManager> = new Map();
 const IGNORED_COMMANDS = ["getScreenshot", "stopRecordingScreen", "startRecordingScreen"];
@@ -34,10 +35,28 @@ class AppiumDashboardPlugin extends BasePlugin {
       sessionTimeout: {
         isNumber: true,
       },
+      auth: {
+        isBoolean: true,
+      },
     };
   }
 
-  public static async updateServer(expressApp: express.Application) {
+  public static async updateServer(
+    expressApp: express.Application,
+    _httpServer: any,
+    cliArgs: any,
+  ) {
+    const authEnabled = !!cliArgs?.plugin?.["tractive-appium-dashboard"]?.auth;
+    try {
+      await bootstrapAdmin(authEnabled);
+    } catch (err: any) {
+      pluginLogger.error(`Failed to bootstrap auth: ${err?.message ?? err}`);
+      if (authEnabled) {
+        // If auth was explicitly requested, refuse to start without it.
+        throw err;
+      }
+    }
+
     registerDebugMiddlware(expressApp);
     expressApp.use("/dashboard", Container.get("expressRouter") as any);
     pluginLogger.info("Dashboard plugin is enabled and will be served at http://localhost:4723/dashboard");
