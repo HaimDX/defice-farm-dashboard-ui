@@ -27,8 +27,18 @@ function getRouter({ config, dependencies }: { config: Config; dependencies: Rec
   });
 
   /* Everything registered below is gated by requireAuth. The middleware is a
-     no-op when auth is disabled (the default), so this is back-compat safe. */
-  apiRouter.use(requireAuth);
+     no-op when auth is disabled (the default), so this is back-compat safe.
+     Exception: GET /sessions is exempted because the device-farm plugin calls
+     it server-to-server to enrich device cards with session counts, and it
+     has no way to forward a bearer token through that cross-plugin hop. This
+     parallels the unauthenticated /ping healthcheck above. Only the list
+     endpoint is exempted — session detail, deletion, and logs stay gated. */
+  apiRouter.use((req, res, next) => {
+    if (req.method === "GET" && req.path === "/sessions") {
+      return next();
+    }
+    return requireAuth(req, res, next);
+  });
 
   registerRoutes(apiRouter, config, dependencies);
 
